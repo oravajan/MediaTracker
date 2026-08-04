@@ -1,0 +1,9 @@
+# Build output
+bin/
+obj/
+
+# Environment specific settings
+appsettings.Development.json
+
+# Rider
+.idea/
