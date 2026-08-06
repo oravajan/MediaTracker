@@ -37,10 +37,19 @@ export default function MovieDetailPage() {
                 initialData={{
                     title: movie.title,
                     userRating: movie.userRating,
-                    nextMovieId: movie.nextMovieId
+                    nextMovieId: movie.nextMovieId,
+                    isWatched: movie.isWatched
                 }}
                 excludeId={movie.id}
-                onSave={dto => updateMovie({id: movie.id, dto}, {
+                showWatched={true}
+                onSave={data => updateMovie({
+                    id: movie.id, dto: {
+                        title: data.title,
+                        userRating: data.userRating,
+                        nextMovieId: data.nextMovieId,
+                        isWatched: data.isWatched ?? false,
+                    }
+                }, {
                     onSuccess: () => navigate('/')
                 })}
                 isSaving={isPending}

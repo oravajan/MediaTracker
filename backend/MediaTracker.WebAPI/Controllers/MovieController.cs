@@ -35,4 +35,11 @@ public class MovieController : ControllerBase
         var movie = await _movieService.UpdateAsync(id, dto);
         return Ok(movie);
     }
+    
+    [HttpPatch("{id:guid}/watched")]
+    public async Task<ActionResult<MovieDto>> MarkWatched(Guid episodeId, MarkWatchedMovieDto dto)
+    {
+        var episode = await _movieService.MarkWatchedAsync(episodeId, dto);
+        return Ok(episode);
+    }
 }

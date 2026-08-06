@@ -19,7 +19,11 @@ export default function MovieCreatePage() {
 
             <MovieForm
                 initialData={{title: '', userRating: null, nextMovieId: null}}
-                onSave={dto => createMovie(dto, {
+                onSave={data => createMovie({
+                    title: data.title,
+                    userRating: data.userRating,
+                    nextMovieId: data.nextMovieId
+                }, {
                     onSuccess: () => navigate(`/`)
                 })}
                 isSaving={isPending}

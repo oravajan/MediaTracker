@@ -1,18 +1,25 @@
 import {useState} from 'react'
 import {useMedia} from '../../hooks/useMedia'
-import type {CreateMovieDto} from '../../types/movie'
 
-interface Props {
-    initialData: CreateMovieDto
-    excludeId?: string
-    onSave: (dto: CreateMovieDto) => void
-    onCancel?: () => void
-    isSaving: boolean
-    title: string
+export interface MovieFormData {
+    title: string;
+    userRating: number | null;
+    nextMovieId: string | null;
+    isWatched?: boolean;
 }
 
-export default function MovieForm({initialData, excludeId, onSave, onCancel, isSaving, title}: Props) {
-    const [form, setForm] = useState<CreateMovieDto>(initialData)
+interface Props {
+    initialData: MovieFormData;
+    excludeId?: string;
+    onSave: (data: MovieFormData) => void;
+    onCancel?: () => void;
+    isSaving: boolean;
+    title: string;
+    showWatched?: boolean;
+}
+
+export default function MovieForm({initialData, excludeId, onSave, onCancel, isSaving, title, showWatched}: Props) {
+    const [form, setForm] = useState<MovieFormData>(initialData)
     const {data: allMedia} = useMedia()
 
     const availableNextMovies = allMedia?.filter(m =>
@@ -72,6 +79,21 @@ export default function MovieForm({initialData, excludeId, onSave, onCancel, isS
                         ))}
                     </select>
                 </div>
+
+                {showWatched && (
+                    <div className="flex items-center gap-3 pt-2">
+                        <input
+                            type="checkbox"
+                            id="isWatched"
+                            className="w-4 h-4 cursor-pointer accent-accent"
+                            checked={form.isWatched ?? false}
+                            onChange={e => setForm(f => ({...f, isWatched: e.target.checked}))}
+                        />
+                        <label htmlFor="isWatched" className="text-sm font-medium text-surface cursor-pointer">
+                            Mark as Watched
+                        </label>
+                    </div>
+                )}
             </div>
 
             <div className="flex gap-3 mt-8">

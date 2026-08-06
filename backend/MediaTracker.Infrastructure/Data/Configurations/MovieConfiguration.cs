@@ -13,5 +13,8 @@ internal class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .HasForeignKey(m => m.NextMovieId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.Property(m => m.IsWatched)
+            .IsRequired();
     }
 }
