@@ -39,7 +39,7 @@ public class EpisodeController : ControllerBase
     [HttpPatch("{episodeId:guid}/watched")]
     public async Task<ActionResult<EpisodeDto>> MarkWatched(Guid episodeId, MarkWatchedEpisodeDto dto)
     {
-        var episode = await _tvShowService.MarkWatchedAsync(episodeId, dto);
+        var episode = await _tvShowService.MarkWatchedEpisodeAsync(episodeId, dto);
         return Ok(episode);
     }
 }

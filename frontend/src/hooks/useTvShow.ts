@@ -94,11 +94,11 @@ export const useDeleteEpisode = (tvShowId: string) => {
     })
 }
 
-export const useMarkWatched = (tvShowId: string) => {
+export const useMarkWatchedEpisode = (tvShowId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({seasonId, episodeId, dto}: { seasonId: string; episodeId: string; dto: MarkWatchedEpisodeDto }) =>
-            tvShowApi.markWatched(tvShowId, seasonId, episodeId, dto),
+            tvShowApi.markWatchedEpisode(tvShowId, seasonId, episodeId, dto),
         onSuccess: () => {
             void queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
             void queryClient.invalidateQueries({queryKey: ['media']})

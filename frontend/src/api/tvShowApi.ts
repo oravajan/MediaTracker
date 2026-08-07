@@ -53,7 +53,7 @@ export const tvShowApi = {
         await client.delete(`/api/tvshows/${tvShowId}/seasons/${seasonId}/episodes/${episodeId}`)
     },
 
-    markWatched: async (tvShowId: string, seasonId: string, episodeId: string, dto: MarkWatchedEpisodeDto): Promise<EpisodeDto> => {
+    markWatchedEpisode: async (tvShowId: string, seasonId: string, episodeId: string, dto: MarkWatchedEpisodeDto): Promise<EpisodeDto> => {
         const response = await client.patch<EpisodeDto>(
             `/api/tvshows/${tvShowId}/seasons/${seasonId}/episodes/${episodeId}/watched`, dto
         )

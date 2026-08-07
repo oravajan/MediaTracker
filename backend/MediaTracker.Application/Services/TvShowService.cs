@@ -99,7 +99,7 @@ public class TvShowService : ITvShowService
         await _mediaRepository.SaveChangesAsync();
     }
 
-    public async Task<EpisodeDto> MarkWatchedAsync(Guid episodeId, MarkWatchedEpisodeDto dto)
+    public async Task<EpisodeDto> MarkWatchedEpisodeAsync(Guid episodeId, MarkWatchedEpisodeDto dto)
     {
         var episode = await _mediaRepository.GetEpisodeByIdAsync(episodeId);
         if (episode is null)

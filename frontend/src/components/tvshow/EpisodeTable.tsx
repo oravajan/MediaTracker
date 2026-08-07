@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {useAddEpisode, useUpdateEpisode, useDeleteEpisode, useMarkWatched} from '../../hooks/useTvShow'
+import {useAddEpisode, useUpdateEpisode, useDeleteEpisode, useMarkWatchedEpisode} from '../../hooks/useTvShow'
 import ConfirmDialog from '../ui/ConfirmDialog'
 import type {EpisodeDto, SeasonDto} from '../../types/tvshow'
 
@@ -18,7 +18,7 @@ export default function EpisodeTable({tvShowId, season}: Props) {
     const {mutate: addEpisode} = useAddEpisode(tvShowId)
     const {mutate: updateEpisode} = useUpdateEpisode(tvShowId)
     const {mutate: deleteEpisode} = useDeleteEpisode(tvShowId)
-    const {mutate: markWatched} = useMarkWatched(tvShowId)
+    const {mutate: markWatchedEpisode} = useMarkWatchedEpisode(tvShowId)
 
     const nextEpisodeNumber = season.episodes.length === 0
         ? 1
@@ -123,7 +123,7 @@ export default function EpisodeTable({tvShowId, season}: Props) {
                                     <input
                                         type="checkbox"
                                         checked={ep.isWatched}
-                                        onChange={e => markWatched({
+                                        onChange={e => markWatchedEpisode({
                                             seasonId: season.id,
                                             episodeId: ep.id,
                                             dto: {isWatched: e.target.checked}
