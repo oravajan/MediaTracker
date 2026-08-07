@@ -3,7 +3,6 @@ export interface MovieDto {
     title: string;
     userRating: number | null;
     nextMovieId: string | null;
-    nextMovieTitle: string | null;
     isWatched: boolean;
 }
 

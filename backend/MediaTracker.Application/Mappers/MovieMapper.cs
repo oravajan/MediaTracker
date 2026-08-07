@@ -12,7 +12,6 @@ public static class MovieMapper
 
     public static MovieDto ToDto(this Movie movie)
     {
-        return new MovieDto(movie.Id, movie.Title, movie.UserRating, movie.NextMovieId, movie.NextMovie?.Title,
-            movie.IsWatched);
+        return new MovieDto(movie.Id, movie.Title, movie.UserRating, movie.NextMovieId, movie.IsWatched);
     }
 }
