@@ -81,17 +81,20 @@ export default function MovieForm({initialData, excludeId, onSave, onCancel, isS
                 </div>
 
                 {showWatched && (
-                    <div className="flex items-center gap-3 pt-2">
-                        <input
-                            type="checkbox"
-                            id="isWatched"
-                            className="w-4 h-4 cursor-pointer accent-accent"
-                            checked={form.isWatched ?? false}
-                            onChange={e => setForm(f => ({...f, isWatched: e.target.checked}))}
-                        />
-                        <label htmlFor="isWatched" className="text-sm font-medium text-surface cursor-pointer">
-                            Mark as Watched
-                        </label>
+                    <div
+                        className="flex items-center justify-between px-4 py-3 bg-card border border-border rounded-lg cursor-pointer hover:border-accent transition-colors"
+                        onClick={() => setForm(f => ({...f, isWatched: !f.isWatched}))}
+                    >
+                        <span className="text-sm text-surface">Watched</span>
+
+                        <div className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${
+                            form.isWatched ? 'bg-accent' : 'bg-border'
+                        }`}>
+                            <div
+                                className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${
+                                    form.isWatched ? 'translate-x-5' : 'translate-x-0.5'
+                                }`}/>
+                        </div>
                     </div>
                 )}
             </div>

@@ -59,27 +59,31 @@ export default function MediaTableRow({media, onDelete, onWatch}: Props) {
             <td className="px-4 py-3 whitespace-nowrap">
                 <WatchedStatus media={media}/>
             </td>
-            <td className="px-4 py-3 text-right">
-                {!media.isWatched && (
+            <td className="px-4 py-3">
+                <div className="flex gap-1 justify-end items-center">
                     <button
                         onClick={e => {
                             e.stopPropagation();
                             onWatch(media)
                         }}
-                        className="text-xs text-muted px-2.5 py-1 rounded border border-transparent hover:border-accent hover:text-accent transition-colors"
+                        className={`text-xs px-2.5 py-1 rounded border transition-colors whitespace-nowrap ${
+                            media.isWatched
+                                ? 'invisible'
+                                : 'text-muted border-transparent hover:border-accent hover:text-accent'
+                        }`}
                     >
                         Watch
                     </button>
-                )}
-                <button
-                    onClick={e => {
-                        e.stopPropagation();
-                        onDelete(media)
-                    }}
-                    className="text-xs text-muted px-3 py-1.5 rounded border border-transparent hover:border-danger hover:text-danger transition-colors duration-150"
-                >
-                    Delete
-                </button>
+                    <button
+                        onClick={e => {
+                            e.stopPropagation();
+                            onDelete(media)
+                        }}
+                        className="text-xs text-muted px-2.5 py-1 rounded border border-transparent hover:border-danger hover:text-danger transition-colors whitespace-nowrap"
+                    >
+                        Delete
+                    </button>
+                </div>
             </td>
         </tr>
     )
