@@ -2,6 +2,7 @@ import {useParams, useNavigate} from 'react-router-dom'
 import {useTvShow, useUpdateTvShow} from '../hooks/useTvShow'
 import TvShowForm from '../components/tvshow/TvShowForm'
 import SeasonList from '../components/tvshow/SeasonList'
+import toast from "react-hot-toast";
 
 export default function TvShowDetailPage() {
     const {id} = useParams<{ id: string }>()
@@ -37,7 +38,10 @@ export default function TvShowDetailPage() {
                 key={tvShow.id}
                 initialData={{title: tvShow.title, userRating: tvShow.userRating}}
                 onSave={dto => updateTvShow({id: tvShow.id, dto}, {
-                    onSuccess: () => navigate('/')
+                    onSuccess: () => {
+                        toast.success('TV Show saved successfully.')
+                        navigate('/')
+                    }
                 })}
                 isSaving={isPending}
                 title={tvShow.title}

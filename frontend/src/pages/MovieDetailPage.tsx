@@ -1,6 +1,7 @@
 import {useParams, useNavigate} from 'react-router-dom'
 import {useMovie, useUpdateMovie} from '../hooks/useMovie'
 import MovieForm from '../components/movie/MovieForm'
+import toast from "react-hot-toast";
 
 export default function MovieDetailPage() {
     const {id} = useParams<{ id: string }>()
@@ -50,7 +51,10 @@ export default function MovieDetailPage() {
                         isWatched: data.isWatched ?? false,
                     }
                 }, {
-                    onSuccess: () => navigate('/')
+                    onSuccess: () => {
+                        toast.success('Movie saved successfully.')
+                        navigate('/')
+                    }
                 })}
                 isSaving={isPending}
                 title={movie.title}

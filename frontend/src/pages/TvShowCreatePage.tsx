@@ -1,6 +1,7 @@
 import {useNavigate} from 'react-router-dom'
 import {useCreateTvShow} from '../hooks/useTvShow'
 import TvShowForm from '../components/tvshow/TvShowForm'
+import toast from "react-hot-toast";
 
 export default function TvShowCreatePage() {
     const navigate = useNavigate()
@@ -20,7 +21,10 @@ export default function TvShowCreatePage() {
             <TvShowForm
                 initialData={{title: '', userRating: null}}
                 onSave={dto => createTvShow(dto, {
-                    onSuccess: () => navigate('/')
+                    onSuccess: () => {
+                        toast.success('TV Show saved successfully.')
+                        navigate('/')
+                    }
                 })}
                 isSaving={isPending}
                 title="Add TV Show"

@@ -1,6 +1,7 @@
 import {useNavigate} from 'react-router-dom'
 import {useCreateMovie} from '../hooks/useMovie'
 import MovieForm from '../components/movie/MovieForm'
+import toast from 'react-hot-toast'
 
 export default function MovieCreatePage() {
     const navigate = useNavigate()
@@ -24,7 +25,10 @@ export default function MovieCreatePage() {
                     userRating: data.userRating,
                     nextMovieId: data.nextMovieId
                 }, {
-                    onSuccess: () => navigate(`/`)
+                    onSuccess: () => {
+                        toast.success('Movie saved successfully.')
+                        navigate(`/`)
+                    }
                 })}
                 isSaving={isPending}
                 title="Add Movie"
