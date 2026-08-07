@@ -4,9 +4,28 @@ import type {MediaSummaryDto} from '../../types/media'
 interface Props {
     media: MediaSummaryDto
     onDelete: (media: MediaSummaryDto) => void
+    onWatch: (media: MediaSummaryDto) => void
 }
 
-export default function MediaTableRow({media, onDelete}: Props) {
+function WatchedStatus({media}: { media: MediaSummaryDto }) {
+    if (media.type === 'Movie') {
+        return media.isWatched
+            ? <span className="text-accent text-sm">✓ Watched</span>
+            : <span className="text-muted text-sm">—</span>
+    }
+
+    if (media.totalEpisodeCount === 0 || media.totalEpisodeCount === null) {
+        return <span className="text-muted text-sm">—</span>
+    }
+
+    return (
+        <span className={`text-sm tabular-nums ${media.isWatched ? 'text-accent' : 'text-muted'}`}>
+            {media.watchedEpisodeCount}/{media.totalEpisodeCount}
+        </span>
+    )
+}
+
+export default function MediaTableRow({media, onDelete, onWatch}: Props) {
     const navigate = useNavigate()
 
     const handleRowClick = () => {
@@ -37,7 +56,21 @@ export default function MediaTableRow({media, onDelete}: Props) {
                     <span className="text-muted">—</span>
                 )}
             </td>
+            <td className="px-4 py-3 whitespace-nowrap">
+                <WatchedStatus media={media}/>
+            </td>
             <td className="px-4 py-3 text-right">
+                {!media.isWatched && (
+                    <button
+                        onClick={e => {
+                            e.stopPropagation();
+                            onWatch(media)
+                        }}
+                        className="text-xs text-muted px-2.5 py-1 rounded border border-transparent hover:border-accent hover:text-accent transition-colors"
+                    >
+                        Watch
+                    </button>
+                )}
                 <button
                     onClick={e => {
                         e.stopPropagation();

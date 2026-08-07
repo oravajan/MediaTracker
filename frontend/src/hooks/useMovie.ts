@@ -23,8 +23,8 @@ export const useUpdateMovie = () => {
         mutationFn: ({id, dto}: { id: string; dto: UpdateMovieDto }) =>
             movieApi.update(id, dto),
         onSuccess: (_, {id}) => {
-            queryClient.invalidateQueries({queryKey: ['movies', id]})
-            queryClient.invalidateQueries({queryKey: ['media']})
+            void queryClient.invalidateQueries({queryKey: ['movies', id]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
         },
     })
 }

@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useMedia, useDeleteMedia} from '../hooks/useMedia'
+import {useMedia, useDeleteMedia, useWatchMedia} from '../hooks/useMedia'
 import MediaTable from '../components/media/MediaTable'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import type {MediaSummaryDto} from '../types/media'
@@ -20,6 +20,7 @@ export default function HomePage() {
 
     const {data: media, isLoading, isError} = useMedia()
     const {mutate: deleteMedia} = useDeleteMedia()
+    const {mutate: watchMedia} = useWatchMedia()
 
     const filtered = media?.filter(m =>
         activeFilter === 'All' ? true : m.type === activeFilter
@@ -86,7 +87,7 @@ export default function HomePage() {
                     No entries yet. Add your first movie or TV show.
                 </p>
             ) : (
-                <MediaTable items={filtered} onDelete={setPendingDelete}/>
+                <MediaTable items={filtered} onDelete={setPendingDelete} onWatch={m => watchMedia(m.id)}/>
             )}
 
             {pendingDelete && (

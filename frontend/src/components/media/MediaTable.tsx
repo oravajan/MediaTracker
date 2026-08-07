@@ -4,16 +4,18 @@ import MediaTableRow from './MediaTableRow'
 interface Props {
     items: MediaSummaryDto[]
     onDelete: (media: MediaSummaryDto) => void
+    onWatch: (media: MediaSummaryDto) => void
 }
 
 const COLUMNS = [
     {key: 'type', label: 'Type'},
     {key: 'title', label: 'Title'},
     {key: 'userRating', label: 'Rating'},
+    {key: 'watched', label: 'Watched'},
     {key: 'actions', label: ''},
 ] as const
 
-export default function MediaTable({items, onDelete}: Props) {
+export default function MediaTable({items, onDelete, onWatch}: Props) {
     return (
         <table className="w-full border-collapse">
             <thead>
@@ -34,6 +36,7 @@ export default function MediaTable({items, onDelete}: Props) {
                     key={media.id}
                     media={media}
                     onDelete={onDelete}
+                    onWatch={onWatch}
                 />
             ))}
             </tbody>

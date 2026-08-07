@@ -16,3 +16,14 @@ export const useDeleteMedia = () => {
         onSuccess: () => queryClient.invalidateQueries({queryKey: ['media']}),
     })
 }
+
+export const useWatchMedia = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: mediaApi.watch,
+        onSuccess: (_, id) => {
+            void queryClient.invalidateQueries({ queryKey: ['media'] })
+            void queryClient.invalidateQueries({ queryKey: ['tvshows', id] })
+        },
+    })
+}

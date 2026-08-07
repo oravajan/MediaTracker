@@ -21,6 +21,8 @@ public abstract class Media
     protected Media()
     {
     }
+    
+    public abstract void Watch();
 
     public void Update(string title, int? userRating)
     {

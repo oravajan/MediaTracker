@@ -28,4 +28,11 @@ public class MediaController : ControllerBase
         await _mediaService.DeleteAsync(id);
         return NoContent();
     }
+    
+    [HttpPatch("{id:guid}/watch")]
+    public async Task<ActionResult<MediaSummaryDto>> Watch(Guid id)
+    {
+        var result = await _mediaService.WatchAsync(id);
+        return Ok(result);
+    }
 }

@@ -30,8 +30,8 @@ export const useUpdateTvShow = () => {
         mutationFn: ({id, dto}: { id: string; dto: UpdateTvShowDto }) =>
             tvShowApi.update(id, dto),
         onSuccess: (_, {id}) => {
-            queryClient.invalidateQueries({queryKey: ['tvshows', id]})
-            queryClient.invalidateQueries({queryKey: ['media']})
+            void queryClient.invalidateQueries({queryKey: ['tvshows', id]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
         },
     })
 }
@@ -66,7 +66,10 @@ export const useAddEpisode = (tvShowId: string) => {
     return useMutation({
         mutationFn: ({seasonId, dto}: { seasonId: string; dto: CreateEpisodeDto }) =>
             tvShowApi.addEpisode(tvShowId, seasonId, dto),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]}),
+        onSuccess: () => {
+            void queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
+        },
     })
 }
 
@@ -84,7 +87,10 @@ export const useDeleteEpisode = (tvShowId: string) => {
     return useMutation({
         mutationFn: ({seasonId, episodeId}: { seasonId: string; episodeId: string }) =>
             tvShowApi.deleteEpisode(tvShowId, seasonId, episodeId),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]}),
+        onSuccess: () => {
+            void queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
+        },
     })
 }
 
@@ -93,6 +99,9 @@ export const useMarkWatched = (tvShowId: string) => {
     return useMutation({
         mutationFn: ({seasonId, episodeId, dto}: { seasonId: string; episodeId: string; dto: MarkWatchedEpisodeDto }) =>
             tvShowApi.markWatched(tvShowId, seasonId, episodeId, dto),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]}),
+        onSuccess: () => {
+            void queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
+        },
     })
 }

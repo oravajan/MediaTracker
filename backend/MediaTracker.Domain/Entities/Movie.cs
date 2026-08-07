@@ -22,6 +22,11 @@ public class Movie : Media
     {
     }
 
+    public override void Watch()
+    {
+        IsWatched = true;
+    }
+
     public void Update(string title, int? userRating, Guid? nextMovieId, bool isWatched)
     {
         base.Update(title, userRating);

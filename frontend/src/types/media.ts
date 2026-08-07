@@ -3,4 +3,7 @@ export interface MediaSummaryDto {
     title: string;
     type: 'Movie' | 'TvShow';
     userRating: number | null;
+    isWatched: boolean;
+    watchedEpisodeCount: number | null;
+    totalEpisodeCount: number | null;
 }
