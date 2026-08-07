@@ -5,12 +5,10 @@ public record MovieDto(
     string Title,
     int? UserRating,
     Guid? NextMovieId,
-    bool IsWatched) : MediaDto(Id, Title, UserRating);
+    bool IsWatched);
 
-public record CreateMovieDto(string Title, int? UserRating, Guid? NextMovieId)
-    : CreateMediaDto(Title, UserRating);
+public record CreateMovieDto(string Title, int? UserRating, Guid? NextMovieId);
 
-public record UpdateMovieDto(string Title, int? UserRating, Guid? NextMovieId, bool IsWatched)
-    : UpdateMediaDto(Title, UserRating);
+public record UpdateMovieDto(string Title, int? UserRating, Guid? NextMovieId, bool IsWatched);
 
 public record MarkWatchedMovieDto(bool IsWatched);
