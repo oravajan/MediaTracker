@@ -2,6 +2,8 @@
 
 A personal media tracking application for managing movies and TV shows with seasons and episodes.
 
+Demo: https://mediatracker.up.railway.app/
+
 ## Tech Stack
 
 **Backend**
