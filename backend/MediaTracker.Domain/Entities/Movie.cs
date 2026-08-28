@@ -31,9 +31,6 @@ public class Movie : Media
     {
         base.Update(title, userRating);
 
-        if (nextMovieId == Id)
-            throw new DomainException("Movie cannot reference itself as next movie.");
-
         ValidateNextMovieId(nextMovieId);
         NextMovieId = nextMovieId;
         IsWatched = isWatched;
