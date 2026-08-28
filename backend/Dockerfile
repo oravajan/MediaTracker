@@ -7,7 +7,7 @@ COPY MediaTracker.Application/MediaTracker.Application.csproj MediaTracker.Appli
 COPY MediaTracker.Infrastructure/MediaTracker.Infrastructure.csproj MediaTracker.Infrastructure/
 COPY MediaTracker.WebAPI/MediaTracker.WebAPI.csproj MediaTracker.WebAPI/
 
-RUN dotnet restore
+RUN dotnet restore MediaTracker.WebAPI/MediaTracker.WebAPI.csproj
 
 COPY . .
 
