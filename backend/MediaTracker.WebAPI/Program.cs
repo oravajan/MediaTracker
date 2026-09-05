@@ -1,8 +1,10 @@
+using System.Net.Http.Headers;
 using MediaTracker.Application.Exceptions;
 using MediaTracker.Application.Interfaces;
 using MediaTracker.Application.Services;
 using MediaTracker.Domain.Exceptions;
 using MediaTracker.Infrastructure.Data;
+using MediaTracker.Infrastructure.ExternalServices.Tmdb;
 using MediaTracker.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,14 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(builder.Configuration["AllowedOrigins:Frontend"]!)
             .AllowAnyMethod()
             .AllowAnyHeader());
+});
+
+builder.Services.AddHttpClient<ITmdbService, TmdbService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+        "Bearer",
+        builder.Configuration["Tmdb:AccessToken"]);
 });
 
 var app = builder.Build();
