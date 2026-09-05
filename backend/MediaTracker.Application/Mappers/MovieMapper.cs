@@ -7,11 +7,11 @@ public static class MovieMapper
 {
     public static Movie ToEntity(this CreateMovieDto dto)
     {
-        return new Movie(Guid.Empty, dto.Title, dto.UserRating, dto.NextMovieId, null, false);
+        return new Movie(Guid.Empty, dto.Title, dto.UserRating, dto.NextMovieId, null, false, dto.TmdbId);
     }
 
     public static MovieDto ToDto(this Movie movie)
     {
-        return new MovieDto(movie.Id, movie.Title, movie.UserRating, movie.NextMovieId, movie.IsWatched);
+        return new MovieDto(movie.Id, movie.Title, movie.UserRating, movie.NextMovieId, movie.IsWatched, movie.TmdbId);
     }
 }

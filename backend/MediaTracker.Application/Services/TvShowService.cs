@@ -36,7 +36,7 @@ public class TvShowService : ITvShowService
         var tvShow = await _mediaRepository.GetTvShowByIdAsync(id);
         if (tvShow is null)
             throw new NotFoundException($"TV Show with id {id} was not found.");
-        tvShow.Update(dto.Title, dto.UserRating);
+        tvShow.Update(dto.Title, dto.UserRating, dto.TmdbId);
         await _mediaRepository.SaveChangesAsync();
         return tvShow.ToDto();
     }

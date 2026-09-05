@@ -8,8 +8,8 @@ public class Movie : Media
     public Movie? NextMovie { get; private set; }
     public bool IsWatched { get; private set; }
 
-    public Movie(Guid id, string title, int? userRating, Guid? nextMovieId, Movie? nextMovie, bool isWatched) : base(id,
-        title, userRating)
+    public Movie(Guid id, string title, int? userRating, Guid? nextMovieId, Movie? nextMovie, bool isWatched,
+        int? tmdbId) : base(id, title, userRating, tmdbId)
     {
         ValidateNextMovieId(nextMovieId);
 
@@ -27,9 +27,9 @@ public class Movie : Media
         IsWatched = true;
     }
 
-    public void Update(string title, int? userRating, Guid? nextMovieId, bool isWatched)
+    public void Update(string title, int? userRating, Guid? nextMovieId, bool isWatched, int? tmdbId)
     {
-        base.Update(title, userRating);
+        base.Update(title, userRating, tmdbId);
 
         ValidateNextMovieId(nextMovieId);
         NextMovieId = nextMovieId;

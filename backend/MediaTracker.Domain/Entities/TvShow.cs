@@ -9,8 +9,8 @@ public class TvShow : Media
     public int WatchedEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count(e => e.IsWatched);
     public bool IsWatched => TotalEpisodeCount > 0 && WatchedEpisodeCount == TotalEpisodeCount;
 
-    public TvShow(Guid id, string title, int? userRating, List<Season> seasons) : base(id, title,
-        userRating)
+    public TvShow(Guid id, string title, int? userRating, List<Season> seasons, int? tmdbId) : base(id, title,
+        userRating, tmdbId)
     {
         Seasons = seasons;
     }
@@ -30,16 +30,16 @@ public class TvShow : Media
 
         if (allEpisodes.Count == 0)
             return;
-        
+
         var lastWatched = allEpisodes
             .LastOrDefault(x => x.Episode.IsWatched);
-        
+
         if (lastWatched is null)
         {
             allEpisodes.First().Episode.MarkWatched(true);
             return;
         }
-        
+
         var lastWatchedIndex = allEpisodes.IndexOf(lastWatched);
         var nextEpisode = allEpisodes.ElementAtOrDefault(lastWatchedIndex + 1);
 

@@ -13,7 +13,7 @@ public class TvShowTests
         => new(Guid.NewGuid(), number, episodes ?? new List<Episode>());
 
     private static TvShow CreateTvShow(List<Season>? seasons = null)
-        => new(Guid.NewGuid(), "Breaking Bad", null, seasons ?? new List<Season>());
+        => new(Guid.NewGuid(), "Breaking Bad", null, seasons ?? new List<Season>(), null);
 
     [Fact]
     public void AddSeason_WithValidSeason_AddsSeason()

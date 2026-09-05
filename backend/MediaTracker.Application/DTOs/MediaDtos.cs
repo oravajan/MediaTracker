@@ -7,4 +7,5 @@ public record MediaSummaryDto(
     int? UserRating,
     bool IsWatched,
     int? WatchedEpisodeCount,
-    int? TotalEpisodeCount);
+    int? TotalEpisodeCount,
+    int? TmdbId);

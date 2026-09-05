@@ -25,6 +25,7 @@ services:
       ASPNETCORE_URLS: "http://+:8080"
       ConnectionStrings__DefaultConnection: "Host=postgres;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
       AllowedOrigins__Frontend: "http://localhost"
+      Tmdb__AccessToken: ${TMDB_ACCESS_TOKEN}
     depends_on:
       postgres:
         condition: service_healthy

@@ -7,12 +7,12 @@ public static class TvShowMapper
 {
     public static TvShow ToEntity(this CreateTvShowDto dto)
     {
-        return new TvShow(Guid.Empty, dto.Title, dto.UserRating, new List<Season>());
+        return new TvShow(Guid.Empty, dto.Title, dto.UserRating, new List<Season>(), dto.TmdbId);
     }
 
     public static TvShowDto ToDto(this TvShow tvShow)
     {
         return new TvShowDto(tvShow.Id, tvShow.Title,
-            tvShow.UserRating, tvShow.Seasons.Select(s => s.ToDto()).ToList());
+            tvShow.UserRating, tvShow.Seasons.Select(s => s.ToDto()).ToList(), tvShow.TmdbId);
     }
 }

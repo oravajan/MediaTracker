@@ -70,6 +70,16 @@ cp .env.example .env
 docker compose up -d
 ```
 
+### TMDB Integration (optional)
+
+MediaTracker supports automatic metadata fetching from [The Movie Database (TMDB)](https://www.themoviedb.org).
+
+1. Register for a free account at [themoviedb.org](https://www.themoviedb.org/signup)
+2. Go to Settings → API and copy your **API Read Access Token**
+3. Add it to your `.env` file:
+
+Without a TMDB token the application still works fully, but a lot of functions will be unavailable.
+
 ### What happens in the background?
 
 Once started, Docker automatically orchestrates the entire environment:

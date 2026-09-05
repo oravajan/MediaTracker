@@ -7,8 +7,9 @@ public abstract class Media
     public Guid Id { get; private set; }
     public string Title { get; private set; } = string.Empty;
     public int? UserRating { get; private set; }
+    public int? TmdbId { get; private set; }
 
-    public Media(Guid id, string title, int? userRating)
+    public Media(Guid id, string title, int? userRating, int? tmdbId)
     {
         ValidateTitle(title);
         ValidateUserRating(userRating);
@@ -16,21 +17,23 @@ public abstract class Media
         Id = id;
         Title = title;
         UserRating = userRating;
+        TmdbId = tmdbId;
     }
 
     protected Media()
     {
     }
-    
+
     public abstract void Watch();
 
-    public void Update(string title, int? userRating)
+    public void Update(string title, int? userRating, int? tmdbId)
     {
         ValidateTitle(title);
         ValidateUserRating(userRating);
 
         Title = title;
         UserRating = userRating;
+        TmdbId = tmdbId;
     }
 
     private static void ValidateTitle(string title)
