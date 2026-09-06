@@ -36,8 +36,14 @@ export default function TvShowDetailPage() {
 
             <TvShowForm
                 key={tvShow.id}
-                initialData={{title: tvShow.title, userRating: tvShow.userRating}}
-                onSave={dto => updateTvShow({id: tvShow.id, dto}, {
+                initialData={{title: tvShow.title, userRating: tvShow.userRating, tmdbId: tvShow.tmdbId}}
+                onSave={data => updateTvShow({
+                    id: tvShow.id, dto: {
+                        title: data.title,
+                        userRating: data.userRating,
+                        tmdbId: data.tmdbId
+                    }
+                }, {
                     onSuccess: () => {
                         toast.success('TV Show saved successfully.')
                         navigate('/')

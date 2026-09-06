@@ -19,11 +19,18 @@ export default function MovieCreatePage() {
             <p className="text-xs text-muted uppercase tracking-widest mb-2">🎬 Movie</p>
 
             <MovieForm
-                initialData={{title: '', userRating: null, nextMovieId: null}}
+                initialData={{
+                    title: '',
+                    userRating: null,
+                    nextMovieId: null,
+                    isWatched: false,
+                    tmdbId: null
+                }}
                 onSave={data => createMovie({
                     title: data.title,
                     userRating: data.userRating,
-                    nextMovieId: data.nextMovieId
+                    nextMovieId: data.nextMovieId,
+                    tmdbId: data.tmdbId
                 }, {
                     onSuccess: () => {
                         toast.success('Movie saved successfully.')

@@ -1,12 +1,8 @@
 import {useState} from 'react'
 import {useMedia} from '../../hooks/useMedia'
-
-export interface MovieFormData {
-    title: string;
-    userRating: number | null;
-    nextMovieId: string | null;
-    isWatched?: boolean;
-}
+import {useTmdbMovieSearch, useTmdbStatus} from "../../hooks/useTmdb.ts";
+import type {TmdbMovieSearchDto} from '../../types/tmdb'
+import type {MovieFormData} from '../../types/forms'
 
 interface Props {
     initialData: MovieFormData;
@@ -21,29 +17,76 @@ interface Props {
 export default function MovieForm({initialData, excludeId, onSave, onCancel, isSaving, title, showWatched}: Props) {
     const [form, setForm] = useState<MovieFormData>(initialData)
     const {data: allMedia} = useMedia()
+    const [showResults, setShowResults] = useState(false)
+    const {data: tmdbStatus} = useTmdbStatus()
+    const {data: searchResults, isFetching} = useTmdbMovieSearch(form.title, !!tmdbStatus && showResults)
 
     const availableNextMovies = allMedia?.filter(m =>
         m.type === 'Movie' && m.id !== excludeId
     ) ?? []
+
+    const handleTitleChange = (value: string) => {
+        setForm(f => ({...f, title: value, tmdbId: null}))
+        setShowResults(true)
+    }
+
+    const handleSelectResult = (result: TmdbMovieSearchDto) => {
+        setForm(f => ({...f, title: result.title, tmdbId: result.tmdbId}))
+        setShowResults(false)
+    }
 
     return (
         <div className="max-w-lg">
             <h1 className="text-2xl font-bold tracking-tight mb-8">{title}</h1>
 
             <div className="flex flex-col gap-5">
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5 relative">
                     <label className="text-xs font-medium text-muted uppercase tracking-widest">
                         Title
                     </label>
                     <input
-                        className="bg-card border border-border rounded-lg px-3.5 py-2.5 text-surface text-sm outline-none focus:border-accent transition-colors"
+                        className={`bg-card border rounded-lg px-3.5 py-2.5 text-surface text-sm outline-none transition-colors ${
+                            form.tmdbId
+                                ? 'border-green-500 focus:border-green-400'
+                                : 'border-border focus:border-accent'
+                        }`}
                         value={form.title}
-                        onChange={e => setForm(f => ({...f, title: e.target.value}))}
+                        onChange={e => handleTitleChange(e.target.value)}
+                        onFocus={() => setShowResults(true)}
                         placeholder="Movie title"
                     />
+                    {tmdbStatus && showResults && form.title.length >= 2 && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-9"
+                                onMouseDown={() => setShowResults(false)}
+                            />
+                            <div
+                                className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg overflow-hidden z-10 shadow-lg">
+                                {isFetching ? (
+                                    <div className="px-4 py-3 text-sm text-muted">Searching...</div>
+                                ) : searchResults && searchResults.length > 0 ? (
+                                    searchResults.map(result => (
+                                        <button
+                                            key={result.tmdbId}
+                                            className="w-full text-left px-4 py-2.5 text-sm hover:bg-card-hover transition-colors flex justify-between items-center"
+                                            onMouseDown={() => handleSelectResult(result)}
+                                        >
+                                            <span className="text-surface">{result.title}</span>
+                                            {result.releaseYear && (
+                                                <span className="text-muted text-xs">{result.releaseYear}</span>
+                                            )}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <div className="px-4 py-3 text-sm text-muted">No results found.</div>
+                                )}
+                            </div>
+                        </>
+                    )}
                 </div>
 
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5 relative">
                     <label className="text-xs font-medium text-muted uppercase tracking-widest">
                         Rating <span className="normal-case font-normal">(1–10, optional)</span>
                     </label>

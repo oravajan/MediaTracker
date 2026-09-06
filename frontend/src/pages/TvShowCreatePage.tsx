@@ -19,8 +19,12 @@ export default function TvShowCreatePage() {
             <p className="text-xs text-muted uppercase tracking-widest mb-2">📺 TV Show</p>
 
             <TvShowForm
-                initialData={{title: '', userRating: null}}
-                onSave={dto => createTvShow(dto, {
+                initialData={{title: '', userRating: null, tmdbId: null}}
+                onSave={data => createTvShow({
+                    title: data.title,
+                    userRating: data.userRating,
+                    tmdbId: data.tmdbId
+                }, {
                     onSuccess: () => {
                         toast.success('TV Show saved successfully.')
                         navigate('/')

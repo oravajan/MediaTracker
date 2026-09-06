@@ -40,14 +40,17 @@ export interface TvShowDto {
     title: string;
     userRating: number | null;
     seasons: SeasonDto[];
+    tmdbId: number | null;
 }
 
 export interface CreateTvShowDto {
     title: string;
     userRating: number | null;
+    tmdbId: number | null;
 }
 
 export interface UpdateTvShowDto {
     title: string;
     userRating: number | null;
+    tmdbId: number | null;
 }

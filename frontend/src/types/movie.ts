@@ -4,12 +4,14 @@ export interface MovieDto {
     userRating: number | null;
     nextMovieId: string | null;
     isWatched: boolean;
+    tmdbId: number | null;
 }
 
 export interface CreateMovieDto {
     title: string;
     userRating: number | null;
     nextMovieId: string | null;
+    tmdbId: number | null;
 }
 
 export interface UpdateMovieDto {
@@ -17,6 +19,7 @@ export interface UpdateMovieDto {
     userRating: number | null;
     nextMovieId: string | null;
     isWatched: boolean;
+    tmdbId: number | null;
 }
 
 export interface MarkWatchedMovieDto {
