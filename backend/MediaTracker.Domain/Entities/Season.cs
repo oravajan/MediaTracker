@@ -41,7 +41,7 @@ public class Season
 
     private static void ValidateSeasonNumber(int seasonNumber)
     {
-        if (seasonNumber < 1)
-            throw new DomainException("Season number must be greater than or equal to 1.");
+        if (seasonNumber < 0)
+            throw new DomainException("Season number must be greater than or equal to 0.");
     }
 }

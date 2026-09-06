@@ -24,10 +24,10 @@ public class SeasonTests
     [Fact]
     public void Constructor_WithInvalidSeasonNumber_ThrowsDomainException()
     {
-        var act = () => new Season(Guid.NewGuid(), 0, new List<Episode>());
+        var act = () => new Season(Guid.NewGuid(), -1, new List<Episode>());
 
         act.Should().Throw<DomainException>()
-            .WithMessage("*greater than or equal to 1*");
+            .WithMessage("*greater than or equal to 0*");
     }
 
     [Fact]
@@ -45,10 +45,10 @@ public class SeasonTests
     {
         var season = CreateSeason(1);
 
-        var act = () => season.Update(0);
+        var act = () => season.Update(-1);
 
         act.Should().Throw<DomainException>()
-            .WithMessage("*greater than or equal to 1*");
+            .WithMessage("*greater than or equal to 0*");
     }
 
     [Fact]
