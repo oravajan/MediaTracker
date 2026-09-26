@@ -16,4 +16,6 @@ public interface ITvShowService
     Task<EpisodeDto> UpdateEpisodeAsync(Guid episodeId, UpdateEpisodeDto dto);
     Task DeleteEpisodeAsync(Guid episodeId);
     Task<EpisodeDto> MarkWatchedEpisodeAsync(Guid episodeId, MarkWatchedEpisodeDto dto);
+    
+    Task SyncWithTmdbAsync(Guid tvShowId);
 }

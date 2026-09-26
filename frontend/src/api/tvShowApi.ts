@@ -21,6 +21,10 @@ export const tvShowApi = {
         return response.data
     },
 
+    syncWithTmdb: async (tvShowId: string): Promise<void> => {
+        await client.post(`/api/tvshows/${tvShowId}/sync`)
+    },
+
     addSeason: async (tvShowId: string, dto: CreateSeasonDto): Promise<SeasonDto> => {
         const response = await client.post<SeasonDto>(`/api/tvshows/${tvShowId}/seasons`, dto)
         return response.data

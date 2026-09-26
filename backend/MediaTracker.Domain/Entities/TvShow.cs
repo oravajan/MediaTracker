@@ -56,4 +56,11 @@ public class TvShow : Media
 
         Seasons.Add(season);
     }
+
+    public void ReplaceSeasons(IEnumerable<Season> seasons)
+    {
+        Seasons.Clear();
+        foreach (var season in seasons)
+            AddSeason(season);
+    }
 }

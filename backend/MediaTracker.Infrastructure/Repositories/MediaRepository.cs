@@ -90,9 +90,9 @@ public class MediaRepository : IMediaRepository
             _context.Season.Remove(season);
     }
 
-    public async Task<Episode?> GetEpisodeByIdAsync(Guid seasonId)
+    public async Task<Episode?> GetEpisodeByIdAsync(Guid episodeId)
     {
-        return await _context.Episode.FirstOrDefaultAsync(e => e.Id == seasonId);
+        return await _context.Episode.FirstOrDefaultAsync(e => e.Id == episodeId);
     }
 
     public async Task DeleteEpisodeAsync(Guid episodeId)

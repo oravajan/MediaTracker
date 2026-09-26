@@ -18,7 +18,7 @@ public interface IMediaRepository
 
     Task<Season?> GetSeasonByIdAsync(Guid seasonId);
     Task DeleteSeasonAsync(Guid seasonId);
-    Task<Episode?> GetEpisodeByIdAsync(Guid seasonId);
+    Task<Episode?> GetEpisodeByIdAsync(Guid episodeId);
     Task DeleteEpisodeAsync(Guid episodeId);
 
     Task SaveChangesAsync();

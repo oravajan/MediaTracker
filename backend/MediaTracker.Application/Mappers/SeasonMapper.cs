@@ -13,6 +13,10 @@ public static class SeasonMapper
 
     public static SeasonDto ToDto(this Season season)
     {
-        return new SeasonDto(season.Id, season.SeasonNumber, season.Episodes.Select(e => e.ToDto()).ToList());
+        return new SeasonDto(season.Id, season.SeasonNumber,
+            season.Episodes
+                .OrderBy(e => e.EpisodeNumber)
+                .Select(e => e.ToDto())
+                .ToList());
     }
 }

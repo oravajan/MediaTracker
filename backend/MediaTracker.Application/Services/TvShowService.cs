@@ -2,16 +2,19 @@
 using MediaTracker.Application.Exceptions;
 using MediaTracker.Application.Interfaces;
 using MediaTracker.Application.Mappers;
+using MediaTracker.Domain.Entities;
 
 namespace MediaTracker.Application.Services;
 
 public class TvShowService : ITvShowService
 {
     private readonly IMediaRepository _mediaRepository;
+    private readonly ITmdbService _tmdbService;
 
-    public TvShowService(IMediaRepository mediaRepository)
+    public TvShowService(IMediaRepository mediaRepository, ITmdbService tmdbService)
     {
         _mediaRepository = mediaRepository;
+        _tmdbService = tmdbService;
     }
 
     public async Task<TvShowDto> GetByIdAsync(Guid id)
@@ -28,6 +31,10 @@ public class TvShowService : ITvShowService
         var tvShow = dto.ToEntity();
         await _mediaRepository.AddTvShowAsync(tvShow);
         await _mediaRepository.SaveChangesAsync();
+
+        if (tvShow.TmdbId.HasValue)
+            await SyncWithTmdbAsync(tvShow.Id);
+
         return tvShow.ToDto();
     }
 
@@ -108,5 +115,30 @@ public class TvShowService : ITvShowService
         episode.MarkWatched(dto.IsWatched);
         await _mediaRepository.SaveChangesAsync();
         return episode.ToDto();
+    }
+
+    public async Task SyncWithTmdbAsync(Guid tvShowId)
+    {
+        var tvShow = await _mediaRepository.GetTvShowWithSeasonsAsync(tvShowId);
+        if (tvShow is null)
+            throw new NotFoundException($"TV Show with id {tvShowId} was not found.");
+
+        if (!tvShow.TmdbId.HasValue)
+            throw new InvalidOperationException("TV Show is not linked to TMDB.");
+
+        var tmdbData = await _tmdbService.GetTvShowSeasonsAsync(tvShow.TmdbId.Value);
+        if (tmdbData is null)
+            throw new NotFoundException($"TV Show with TMDB id {tvShow.TmdbId} was not found.");
+
+        var seasons = tmdbData.Seasons.Select(s =>
+        {
+            var season = new Season(Guid.Empty, s.SeasonNumber, new List<Episode>());
+            for (var i = 1; i <= s.EpisodeCount; i++)
+                season.AddEpisode(new Episode(Guid.Empty, i, null, false));
+            return season;
+        }).ToList();
+
+        tvShow.ReplaceSeasons(seasons);
+        await _mediaRepository.SaveChangesAsync();
     }
 }

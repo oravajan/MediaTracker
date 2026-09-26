@@ -36,6 +36,17 @@ export const useUpdateTvShow = () => {
     })
 }
 
+export const useSyncTvShow = (tvShowId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => tvShowApi.syncWithTmdb(tvShowId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['tvshows', tvShowId] })
+            queryClient.invalidateQueries({ queryKey: ['media'] })
+        },
+    })
+}
+
 export const useAddSeason = (tvShowId: string) => {
     const queryClient = useQueryClient()
     return useMutation({

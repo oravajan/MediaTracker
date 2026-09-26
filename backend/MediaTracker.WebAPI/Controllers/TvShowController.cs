@@ -28,6 +28,13 @@ public class TvShowController : ControllerBase
         var tvShow = await _tvShowService.AddAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = tvShow.Id }, tvShow);
     }
+    
+    [HttpPost("{id:guid}/sync")]
+    public async Task<ActionResult> SyncWithTmdb(Guid id)
+    {
+        await _tvShowService.SyncWithTmdbAsync(id);
+        return NoContent();
+    }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<TvShowDto>> Update(Guid id, UpdateTvShowDto dto)

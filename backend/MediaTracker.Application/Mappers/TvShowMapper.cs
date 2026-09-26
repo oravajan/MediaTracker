@@ -12,7 +12,11 @@ public static class TvShowMapper
 
     public static TvShowDto ToDto(this TvShow tvShow)
     {
-        return new TvShowDto(tvShow.Id, tvShow.Title,
-            tvShow.UserRating, tvShow.Seasons.Select(s => s.ToDto()).ToList(), tvShow.TmdbId);
+        return new TvShowDto(tvShow.Id, tvShow.Title, tvShow.UserRating,
+            tvShow.Seasons
+                .OrderBy(s => s.SeasonNumber)
+                .Select(s => s.ToDto())
+                .ToList(),
+            tvShow.TmdbId);
     }
 }
