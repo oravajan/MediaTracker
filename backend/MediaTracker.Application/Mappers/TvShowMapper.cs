@@ -7,7 +7,7 @@ public static class TvShowMapper
 {
     public static TvShow ToEntity(this CreateTvShowDto dto)
     {
-        return new TvShow(Guid.Empty, dto.Title, dto.UserRating, new List<Season>(), dto.TmdbId);
+        return new TvShow(dto.Title, dto.UserRating, dto.TmdbId);
     }
 
     public static TvShowDto ToDto(this TvShow tvShow)

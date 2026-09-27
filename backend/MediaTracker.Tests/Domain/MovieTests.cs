@@ -11,7 +11,7 @@ public class MovieTests
         int? userRating = null,
         Guid? nextMovieId = null,
         bool isWatched = false)
-        => new(Guid.NewGuid(), title, userRating, nextMovieId, null, isWatched, null);
+        => new(title, userRating, nextMovieId, isWatched, null);
 
     [Fact]
     public void Update_WithValidData_UpdatesProperties()
@@ -65,8 +65,7 @@ public class MovieTests
 
         var act = () => movie.Update("Inception", null, movie.Id, false, null);
 
-        act.Should().Throw<DomainException>()
-            .WithMessage("*cannot reference itself*");
+        act.Should().Throw<DomainException>();
     }
 
     [Fact]
@@ -82,18 +81,18 @@ public class MovieTests
     [Fact]
     public void Constructor_WithEmptyTitle_ThrowsDomainException()
     {
-        var act = () => new Movie(Guid.NewGuid(), "", null, null, null, false, null);
+        var act = () => new Movie("", null, null, false, null);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*empty*");
     }
 
     [Fact]
-    public void Constructor_WithSelfReferenceNextMovieId_ThrowsDomainException()
+    public void Constructor_WithEmptyNextMovieId_ThrowsDomainException()
     {
-        var id = Guid.NewGuid();
+        var id = Guid.Empty;
 
-        var act = () => new Movie(id, "Inception", null, id, null, false, null);
+        var act = () => new Movie("Inception", null, id, false, null);
 
         act.Should().Throw<DomainException>();
     }

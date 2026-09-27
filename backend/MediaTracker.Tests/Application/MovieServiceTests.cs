@@ -25,7 +25,7 @@ public class MovieServiceTests
         int? userRating = null,
         Guid? nextMovieId = null,
         bool isWatched = false)
-        => new(Guid.NewGuid(), title, userRating, nextMovieId, null, isWatched, null);
+        => new(title, userRating, null, isWatched, null);
 
     [Fact]
     public async Task GetByIdAsync_WithExistingMovie_ReturnsMovieDto()

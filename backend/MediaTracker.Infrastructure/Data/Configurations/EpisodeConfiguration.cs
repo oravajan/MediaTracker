@@ -11,6 +11,8 @@ internal class EpisodeConfiguration : IEntityTypeConfiguration<Episode>
         builder.ToTable("Episode");
 
         builder.HasKey(e => e.Id);
+        builder.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(e => e.EpisodeNumber)
             .IsRequired();

@@ -10,7 +10,7 @@ public class EpisodeTests
         int number = 1,
         string? title = "Pilot",
         bool isWatched = false)
-        => new(Guid.NewGuid(), number, title, isWatched);
+        => new(number, title, isWatched);
 
     [Fact]
     public void Constructor_WithValidData_CreatesEpisode()
@@ -25,7 +25,7 @@ public class EpisodeTests
     [Fact]
     public void Constructor_WithInvalidEpisodeNumber_ThrowsDomainException()
     {
-        var act = () => new Episode(Guid.NewGuid(), 0, "Pilot", false);
+        var act = () => new Episode(0, "Pilot", false);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*greater than or equal to 1*");

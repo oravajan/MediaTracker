@@ -4,27 +4,24 @@ namespace MediaTracker.Domain.Entities;
 
 public class Season
 {
+    private readonly List<Episode> _episodes = new();
+    
     public Guid Id { get; private set; }
     public int SeasonNumber { get; private set; }
-    public List<Episode> Episodes { get; private set; } = new();
+    public IReadOnlyList<Episode> Episodes => _episodes.AsReadOnly();
 
-    public Season(Guid id, int seasonNumber, List<Episode> episodes)
+    public Season(int seasonNumber)
     {
         ValidateSeasonNumber(seasonNumber);
-
-        Id = id;
+        Id = Guid.Empty;
         SeasonNumber = seasonNumber;
-        Episodes = episodes;
     }
 
-    public Season()
-    {
-    }
+    public Season() { }
 
     public void Update(int seasonNumber)
     {
         ValidateSeasonNumber(seasonNumber);
-
         SeasonNumber = seasonNumber;
     }
 
@@ -36,7 +33,7 @@ public class Season
         if (Episodes.Any(e => e.EpisodeNumber == episode.EpisodeNumber))
             throw new DomainException($"Episode {episode.EpisodeNumber} already exists in this season.");
 
-        Episodes.Add(episode);
+        _episodes.Add(episode);
     }
 
     private static void ValidateSeasonNumber(int seasonNumber)

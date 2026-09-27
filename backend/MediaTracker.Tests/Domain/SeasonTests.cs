@@ -7,10 +7,10 @@ namespace MediaTracker.Tests.Domain;
 public class SeasonTests
 {
     private static Episode CreateEpisode(int number, bool isWatched = false)
-        => new(Guid.NewGuid(), number, $"Episode {number}", isWatched);
+        => new(number, $"Episode {number}", isWatched);
 
     private static Season CreateSeason(int number = 1)
-        => new(Guid.NewGuid(), number, new List<Episode>());
+        => new(number);
 
     [Fact]
     public void Constructor_WithValidData_CreatesSeason()
@@ -24,7 +24,7 @@ public class SeasonTests
     [Fact]
     public void Constructor_WithInvalidSeasonNumber_ThrowsDomainException()
     {
-        var act = () => new Season(Guid.NewGuid(), -1, new List<Episode>());
+        var act = () => new Season(-1);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*greater than or equal to 0*");

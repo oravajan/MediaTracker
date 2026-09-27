@@ -4,20 +4,18 @@ namespace MediaTracker.Domain.Entities;
 
 public class TvShow : Media
 {
-    public List<Season> Seasons { get; private set; } = new();
+    private readonly List<Season> _seasons = new();
+    
+    public IReadOnlyList<Season> Seasons => _seasons.AsReadOnly();
     public int TotalEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count();
     public int WatchedEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count(e => e.IsWatched);
     public bool IsWatched => TotalEpisodeCount > 0 && WatchedEpisodeCount == TotalEpisodeCount;
 
-    public TvShow(Guid id, string title, int? userRating, List<Season> seasons, int? tmdbId) : base(id, title,
-        userRating, tmdbId)
+    public TvShow(string title, int? userRating, int? tmdbId) : base(title, userRating, tmdbId)
     {
-        Seasons = seasons;
     }
 
-    private TvShow()
-    {
-    }
+    private TvShow() { }
 
     public override void Watch()
     {
@@ -54,12 +52,12 @@ public class TvShow : Media
         if (Seasons.Any(s => s.SeasonNumber == season.SeasonNumber))
             throw new DomainException($"Season {season.SeasonNumber} already exists.");
 
-        Seasons.Add(season);
+        _seasons.Add(season);
     }
 
     public void ReplaceSeasons(IEnumerable<Season> seasons)
     {
-        Seasons.Clear();
+        _seasons.Clear();
         foreach (var season in seasons)
             AddSeason(season);
     }

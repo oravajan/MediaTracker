@@ -11,6 +11,8 @@ internal class MediaConfiguration : IEntityTypeConfiguration<Media>
         builder.ToTable("Media");
 
         builder.HasKey(m => m.Id);
+        builder.Property(m => m.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(m => m.Title)
             .IsRequired()

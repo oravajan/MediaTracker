@@ -7,7 +7,7 @@ public static class EpisodeMapper
 {
     public static Episode ToEntity(this CreateEpisodeDto dto)
     {
-        return new Episode(Guid.Empty, dto.EpisodeNumber, dto.Title, dto.IsWatched);
+        return new Episode(dto.EpisodeNumber, dto.Title, dto.IsWatched);
     }
 
     public static EpisodeDto ToDto(this Episode episode)

@@ -7,7 +7,7 @@ public static class MovieMapper
 {
     public static Movie ToEntity(this CreateMovieDto dto)
     {
-        return new Movie(Guid.Empty, dto.Title, dto.UserRating, dto.NextMovieId, null, false, dto.TmdbId);
+        return new Movie(dto.Title, dto.UserRating, dto.NextMovieId, false, dto.TmdbId);
     }
 
     public static MovieDto ToDto(this Movie movie)

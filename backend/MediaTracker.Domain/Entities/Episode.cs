@@ -9,24 +9,20 @@ public class Episode
     public string? Title { get; private set; }
     public bool IsWatched { get; private set; }
 
-    public Episode(Guid id, int episodeNumber, string? title, bool isWatched)
+    public Episode(int episodeNumber, string? title, bool isWatched)
     {
         ValidateEpisodeNumber(episodeNumber);
-
-        Id = id;
+        Id = Guid.Empty;
         EpisodeNumber = episodeNumber;
         Title = title;
         IsWatched = isWatched;
     }
 
-    public Episode()
-    {
-    }
+    public Episode() { }
 
     public void Update(int episodeNumber, string? title, bool isWatched)
     {
         ValidateEpisodeNumber(episodeNumber);
-
         EpisodeNumber = episodeNumber;
         Title = title;
         IsWatched = isWatched;

@@ -7,7 +7,7 @@ public static class SeasonMapper
 {
     public static Season ToEntity(this CreateSeasonDto dto)
     {
-        return new Season(Guid.Empty, dto.SeasonNumber, new List<Episode>());
+        return new Season(dto.SeasonNumber);
     }
 
 

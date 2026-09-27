@@ -8,19 +8,17 @@ public class Movie : Media
     public Movie? NextMovie { get; private set; }
     public bool IsWatched { get; private set; }
 
-    public Movie(Guid id, string title, int? userRating, Guid? nextMovieId, Movie? nextMovie, bool isWatched,
-        int? tmdbId) : base(id, title, userRating, tmdbId)
+    public Movie(string title, int? userRating, Guid? nextMovieId, bool isWatched,
+        int? tmdbId) : base(title, userRating, tmdbId)
     {
         ValidateNextMovieId(nextMovieId);
-
+        
         NextMovieId = nextMovieId;
-        NextMovie = nextMovie;
+        NextMovie = null;
         IsWatched = isWatched;
     }
 
-    private Movie()
-    {
-    }
+    private Movie() { }
 
     public override void Watch()
     {
@@ -43,6 +41,9 @@ public class Movie : Media
 
     private void ValidateNextMovieId(Guid? nextMovieId)
     {
+        if (nextMovieId == Guid.Empty)
+            throw new DomainException("Next movie id cannot be Guid.Empty.");
+        
         if (nextMovieId == Id)
             throw new DomainException("Movie cannot reference itself as next movie.");
     }

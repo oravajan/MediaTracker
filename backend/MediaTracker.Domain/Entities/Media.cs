@@ -9,20 +9,18 @@ public abstract class Media
     public int? UserRating { get; private set; }
     public int? TmdbId { get; private set; }
 
-    public Media(Guid id, string title, int? userRating, int? tmdbId)
+    public Media(string title, int? userRating, int? tmdbId)
     {
         ValidateTitle(title);
         ValidateUserRating(userRating);
 
-        Id = id;
+        Id = Guid.Empty;
         Title = title;
         UserRating = userRating;
         TmdbId = tmdbId;
     }
 
-    protected Media()
-    {
-    }
+    protected Media() { }
 
     public abstract void Watch();
 

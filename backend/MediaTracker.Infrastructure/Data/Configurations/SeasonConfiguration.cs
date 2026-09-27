@@ -11,6 +11,8 @@ internal class SeasonConfiguration : IEntityTypeConfiguration<Season>
         builder.ToTable("Season");
 
         builder.HasKey(s => s.Id);
+        builder.Property(s => s.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(s => s.SeasonNumber)
             .IsRequired();
