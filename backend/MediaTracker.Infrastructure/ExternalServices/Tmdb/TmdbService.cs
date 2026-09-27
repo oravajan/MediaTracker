@@ -68,16 +68,54 @@ public class TmdbService : ITmdbService
         if (response is null)
             return null;
 
-        // Filter out specials - season 0 is usually specials/extras
+        var seasonNumbers = response.Seasons
+            .Where(s => s.SeasonNumber >= 0)
+            .Select(s => s.SeasonNumber)
+            .ToList();
+
+        // Fetch episode details for all seasons in parallel
+        var seasonDetailTasks = seasonNumbers.Select(seasonNumber => GetSeasonEpisodesAsync(tmdbId, seasonNumber));
+        var seasonDetails = await Task.WhenAll(seasonDetailTasks);
+
         var seasons = response.Seasons
             .Where(s => s.SeasonNumber > 0)
-            .Select(s => new TmdbSeasonInfoDto(
-                s.SeasonNumber,
-                s.EpisodeCount,
-                ParseYear(s.AirDate)))
+            .Select(s =>
+            {
+                var episodes = seasonDetails
+                    .FirstOrDefault(d => d?.SeasonNumber == s.SeasonNumber)
+                    ?.Episodes ?? new List<TmdbEpisodeInfoDto>();
+
+                return new TmdbSeasonInfoDto(
+                    s.SeasonNumber,
+                    ParseYear(s.AirDate),
+                    episodes);
+            })
             .ToList();
 
         return new TmdbTvShowSeasonsDto(response.Id, response.Name, seasons);
+    }
+
+    // Fetches episode names for a single season - returns empty list on failure so sync can fall back
+    private async Task<(int SeasonNumber, List<TmdbEpisodeInfoDto> Episodes)?> GetSeasonEpisodesAsync(
+        int tmdbId, int seasonNumber)
+    {
+        try
+        {
+            var detail = await _httpClient.GetFromJsonAsync<TmdbSeasonDetail>(
+                $"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ",
+                JsonOptions);
+
+            var episodes = detail?.Episodes
+                .Select(e => new TmdbEpisodeInfoDto(e.EpisodeNumber, e.Name))
+                .ToList() ?? new List<TmdbEpisodeInfoDto>();
+
+            return (seasonNumber, episodes);
+        }
+        catch
+        {
+            // If a single season fails, fall back to unnamed episodes for that season
+            return (seasonNumber, new List<TmdbEpisodeInfoDto>());
+        }
     }
 
     // Parses "2008-01-20" -> 2008

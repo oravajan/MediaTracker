@@ -6,17 +6,16 @@ export interface TmdbMovieSearchDto {
 
 export interface TmdbTvShowSearchDto {
     tmdbId: number;
-    name: string;
-}
-
-export interface TmdbSeasonInfoDto {
-    seasonNumber: number;
-    episodeCount: number;
-    releaseYear: number | null;
+    title: string;
 }
 
 export interface TmdbTvShowSeasonsDto {
     tmdbId: number;
-    name: string;
+    title: string;
     seasons: TmdbSeasonInfoDto[];
+}
+
+export interface TmdbSeasonInfoDto {
+    seasonNumber: number;
+    releaseYear: number | null;
 }

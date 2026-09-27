@@ -23,7 +23,7 @@ export default function TvShowForm({initialData, onSave, onCancel, isSaving, tit
     }
 
     const handleSelectResult = (result: TmdbTvShowSearchDto) => {
-        setForm(f => ({...f, title: result.name, tmdbId: result.tmdbId}))
+        setForm(f => ({...f, title: result.title, tmdbId: result.tmdbId}))
         setShowResults(false)
     }
 
@@ -65,7 +65,7 @@ export default function TvShowForm({initialData, onSave, onCancel, isSaving, tit
                                             className="w-full text-left px-4 py-2.5 text-sm hover:bg-card-hover transition-colors"
                                             onMouseDown={() => handleSelectResult(result)}
                                         >
-                                            <span className="text-surface">{result.name}</span>
+                                            <span className="text-surface">{result.title}</span>
                                         </button>
                                     ))
                                 ) : (

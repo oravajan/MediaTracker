@@ -7,14 +7,18 @@ public record TmdbMovieSearchDto(
 
 public record TmdbTvShowSearchDto(
     int TmdbId,
-    string Name);
+    string Title);
 
 public record TmdbTvShowSeasonsDto(
     int TmdbId,
-    string Name,
+    string Title,
     List<TmdbSeasonInfoDto> Seasons);
 
 public record TmdbSeasonInfoDto(
     int SeasonNumber,
-    int EpisodeCount,
-    int? ReleaseYear);
+    int? ReleaseYear,
+    List<TmdbEpisodeInfoDto> Episodes);
+
+public record TmdbEpisodeInfoDto(
+    int EpisodeNumber,
+    string? Title);

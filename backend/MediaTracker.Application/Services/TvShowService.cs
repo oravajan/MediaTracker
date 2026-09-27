@@ -133,8 +133,10 @@ public class TvShowService : ITvShowService
         var seasons = tmdbData.Seasons.Select(s =>
         {
             var season = new Season(s.SeasonNumber);
-            for (var i = 1; i <= s.EpisodeCount; i++)
-                season.AddEpisode(new Episode(i, null, false));
+
+            foreach (var episode in s.Episodes)
+                season.AddEpisode(new Episode(episode.EpisodeNumber, episode.Title, false));
+            
             return season;
         }).ToList();
 

@@ -17,9 +17,13 @@ public record TmdbTvShowResult(
 public record TmdbTvShowDetail(
     [property: JsonPropertyName("id")] int Id,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("seasons")] List<TmdbSeasonResult> Seasons);
+    [property: JsonPropertyName("seasons")] List<TmdbSeasonDetail> Seasons);
 
-public record TmdbSeasonResult(
+public record TmdbSeasonDetail(
     [property: JsonPropertyName("season_number")] int SeasonNumber,
-    [property: JsonPropertyName("episode_count")] int EpisodeCount,
-    [property: JsonPropertyName("air_date")] string? AirDate);
+    [property: JsonPropertyName("air_date")] string? AirDate,
+    [property: JsonPropertyName("episodes")] List<TmdbEpisodeResult> Episodes);
+    
+public record TmdbEpisodeResult(
+    [property: JsonPropertyName("episode_number")] int EpisodeNumber,
+    [property: JsonPropertyName("name")] string? Name);
