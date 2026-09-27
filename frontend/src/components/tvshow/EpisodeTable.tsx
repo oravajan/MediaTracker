@@ -14,6 +14,8 @@ export default function EpisodeTable({tvShowId, season}: Props) {
     const [showAddForm, setShowAddForm] = useState(false)
     const [addForm, setAddForm] = useState({episodeNumber: '', title: ''})
     const [deletingId, setDeletingId] = useState<string | null>(null)
+    const [isExpanded, setIsExpanded] = useState(false)
+    const VISIBLE_COUNT = 3
 
     const {mutate: addEpisode} = useAddEpisode(tvShowId)
     const {mutate: updateEpisode} = useUpdateEpisode(tvShowId)
@@ -23,6 +25,9 @@ export default function EpisodeTable({tvShowId, season}: Props) {
     const nextEpisodeNumber = season.episodes.length === 0
         ? 1
         : Math.max(...season.episodes.map(e => e.episodeNumber)) + 1
+
+    const visibleEpisodes = isExpanded ? season.episodes : season.episodes.slice(0, VISIBLE_COUNT)
+    const hiddenCount = season.episodes.length - VISIBLE_COUNT
 
     const handleStartAdd = () => {
         setAddForm({episodeNumber: String(nextEpisodeNumber), title: ''})
@@ -82,7 +87,7 @@ export default function EpisodeTable({tvShowId, season}: Props) {
                 </tr>
                 </thead>
                 <tbody>
-                {season.episodes.map(ep => (
+                {visibleEpisodes.map(ep => (
                     <tr key={ep.id} className="border-t border-border">
                         {editingId === ep.id ? (
                             <td colSpan={4} className="px-4 py-2">
@@ -152,6 +157,19 @@ export default function EpisodeTable({tvShowId, season}: Props) {
                     </tr>
                 ))}
 
+                {hiddenCount > 0 && (
+                    <tr className="border-t border-border">
+                        <td colSpan={4} className="px-4 py-1.5 text-center">
+                            <button
+                                onClick={() => setIsExpanded(!isExpanded)}
+                                className="text-xs text-muted hover:text-accent transition-colors py-1"
+                            >
+                                {isExpanded ? 'Show less' : `Show ${hiddenCount} more episode${hiddenCount > 1 ? 's' : ''}`}
+                            </button>
+                        </td>
+                    </tr>
+                )}
+
                 {showAddForm ? (
                     <tr className="border-t border-border">
                         <td colSpan={4} className="px-4 py-2">
@@ -185,7 +203,7 @@ export default function EpisodeTable({tvShowId, season}: Props) {
                     </tr>
                 ) : (
                     <tr className="border-t border-border">
-                        <td colSpan={4} className="px-4 py-1.5">
+                        <td colSpan={4} className="px-4 py-1.5 text-center">
                             <button
                                 onClick={handleStartAdd}
                                 className="text-xs text-muted hover:text-accent transition-colors py-1"
