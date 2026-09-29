@@ -8,21 +8,24 @@ public class Season
     
     public Guid Id { get; private set; }
     public int SeasonNumber { get; private set; }
+    public int? ReleaseYear { get; private set; }
     public IReadOnlyList<Episode> Episodes => _episodes.AsReadOnly();
 
-    public Season(int seasonNumber)
+    public Season(int seasonNumber, int? releaseYear)
     {
         ValidateSeasonNumber(seasonNumber);
         Id = Guid.Empty;
         SeasonNumber = seasonNumber;
+        ReleaseYear = releaseYear;
     }
 
-    public Season() { }
+    private Season() { }
 
-    public void Update(int seasonNumber)
+    public void Update(int seasonNumber, int? releaseYear)
     {
         ValidateSeasonNumber(seasonNumber);
         SeasonNumber = seasonNumber;
+        ReleaseYear = releaseYear;
     }
 
     public void AddEpisode(Episode episode)

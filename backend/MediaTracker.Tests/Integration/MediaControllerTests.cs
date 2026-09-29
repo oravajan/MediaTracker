@@ -43,7 +43,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     {
         ClearDatabase();
         await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Inception", null, null, null));
+            new CreateMovieDto("Inception", null, null, null, 2000));
         await _client.PostAsJsonAsync("/api/tvshows",
             new CreateTvShowDto("Breaking Bad", null, null));
 
@@ -58,7 +58,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task AddMovie_WithValidData_ReturnsCreated()
     {
         var response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Inception", 9, null, null));
+            new CreateMovieDto("Inception", 9, null, null, 2000));
 
         var result = await response.Content.ReadFromJsonAsync<MovieDto>();
 
@@ -72,7 +72,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task AddMovie_WithEmptyTitle_ReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("", null, null, null));
+            new CreateMovieDto("", null, null, null, 2000));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -81,7 +81,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task AddMovie_WithInvalidRating_ReturnsBadRequest()
     {
         var response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Inception", 11, null, null));
+            new CreateMovieDto("Inception", 11, null, null, 2000));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -90,7 +90,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task GetMovieById_WithExistingMovie_ReturnsMovie()
     {
         var createResponse = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Inception", null, null, null));
+            new CreateMovieDto("Inception", null, null, null, 2000));
         var created = await createResponse.Content.ReadFromJsonAsync<MovieDto>();
 
         var response = await _client.GetAsync($"/api/movies/{created!.Id}");
@@ -112,7 +112,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task DeleteMedia_WithExistingMovie_ReturnsNoContent()
     {
         var createResponse = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Inception", null, null, null));
+            new CreateMovieDto("Inception", null, null, null, 2000));
         var created = await createResponse.Content.ReadFromJsonAsync<MovieDto>();
 
         var response = await _client.DeleteAsync($"/api/media/{created!.Id}");
@@ -124,11 +124,11 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task UpdateMovie_WithValidData_ReturnsUpdatedMovie()
     {
         var createResponse = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Inception", null, null, null));
+            new CreateMovieDto("Inception", null, null, null, 2000));
         var created = await createResponse.Content.ReadFromJsonAsync<MovieDto>();
 
         var response = await _client.PutAsJsonAsync($"/api/movies/{created!.Id}",
-            new UpdateMovieDto("Inception Updated", 8, null, false, null));
+            new UpdateMovieDto("Inception Updated", 8, null, false, null, 2000));
         var result = await response.Content.ReadFromJsonAsync<MovieDto>();
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -140,16 +140,16 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
     public async Task UpdateMovie_WithCircularReference_ReturnsBadRequest()
     {
         var movie1Response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Film 1", null, null, null));
+            new CreateMovieDto("Film 1", null, null, null, 2000));
         var movie1 = await movie1Response.Content.ReadFromJsonAsync<MovieDto>();
 
         var movie2Response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Film 2", null, movie1!.Id, null));
+            new CreateMovieDto("Film 2", null, movie1!.Id, null, 2000));
         var movie2 = await movie2Response.Content.ReadFromJsonAsync<MovieDto>();
 
         // movie1 -> movie2 -> movie1 = circular reference
         var response = await _client.PutAsJsonAsync($"/api/movies/{movie1.Id}",
-            new UpdateMovieDto("Film 1", null, movie2!.Id, false, null));
+            new UpdateMovieDto("Film 1", null, movie2!.Id, false, null, 2000));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -167,7 +167,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
         // Add Season 1 with 2 episodes
         var season1Response = await _client.PostAsJsonAsync(
             $"/api/tvshows/{tvShow!.Id}/seasons",
-            new CreateSeasonDto(1));
+            new CreateSeasonDto(1, 2000));
         var season1 = await season1Response.Content.ReadFromJsonAsync<SeasonDto>();
 
         await _client.PostAsJsonAsync(
@@ -180,7 +180,7 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
         // Add Season 2 with 1 episode
         var season2Response = await _client.PostAsJsonAsync(
             $"/api/tvshows/{tvShow.Id}/seasons",
-            new CreateSeasonDto(2));
+            new CreateSeasonDto(2, 2000));
         var season2 = await season2Response.Content.ReadFromJsonAsync<SeasonDto>();
 
         await _client.PostAsJsonAsync(
@@ -222,29 +222,29 @@ public class MediaControllerTests : IClassFixture<TestWebApplicationFactory>
 
         // Create three movies without links
         var film1Response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Spider-Man", null, null, null));
+            new CreateMovieDto("Spider-Man", null, null, null, 2000));
         var film1 = await film1Response.Content.ReadFromJsonAsync<MovieDto>();
 
         var film2Response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Spider-Man 2", null, null, null));
+            new CreateMovieDto("Spider-Man 2", null, null, null, 2000));
         var film2 = await film2Response.Content.ReadFromJsonAsync<MovieDto>();
 
         var film3Response = await _client.PostAsJsonAsync("/api/movies",
-            new CreateMovieDto("Spider-Man 3", null, null, null));
+            new CreateMovieDto("Spider-Man 3", null, null, null, 2000));
         var film3 = await film3Response.Content.ReadFromJsonAsync<MovieDto>();
 
         // Build valid chain: film1 -> film2 -> film3
         var link1Response = await _client.PutAsJsonAsync($"/api/movies/{film1!.Id}",
-            new UpdateMovieDto("Spider-Man", null, film2!.Id, false, null));
+            new UpdateMovieDto("Spider-Man", null, film2!.Id, false, null, 2000));
         link1Response.StatusCode.Should().Be(HttpStatusCode.OK, "film1 -> film2 is a valid link");
 
         var link2Response = await _client.PutAsJsonAsync($"/api/movies/{film2.Id}",
-            new UpdateMovieDto("Spider-Man 2", null, film3!.Id, false, null));
+            new UpdateMovieDto("Spider-Man 2", null, film3!.Id, false, null, 2000));
         link2Response.StatusCode.Should().Be(HttpStatusCode.OK, "film2 -> film3 is a valid link");
 
         // Try to create circular reference: film3 -> film1 would make film1 -> film2 -> film3 -> film1
         var circularResponse = await _client.PutAsJsonAsync($"/api/movies/{film3.Id}",
-            new UpdateMovieDto("Spider-Man 3", null, film1.Id, false, null));
+            new UpdateMovieDto("Spider-Man 3", null, film1.Id, false, null, 2000));
         circularResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest,
             "film3 -> film1 would create a circular reference");
 

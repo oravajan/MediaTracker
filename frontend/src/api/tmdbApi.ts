@@ -1,5 +1,5 @@
 import client from './client'
-import type {TmdbMovieSearchDto, TmdbTvShowSearchDto, TmdbTvShowSeasonsDto} from '../types/tmdb'
+import type {TmdbMovieSearchDto, TmdbTvShowSearchDto} from '../types/tmdb'
 
 export const tmdbApi = {
     isConfigured: async (): Promise<boolean> => {
@@ -18,11 +18,6 @@ export const tmdbApi = {
         const response = await client.get<TmdbTvShowSearchDto[]>('/api/tmdb/tvshows/search', {
             params: {query}
         })
-        return response.data
-    },
-
-    getTvShowSeasons: async (tmdbId: number): Promise<TmdbTvShowSeasonsDto> => {
-        const response = await client.get<TmdbTvShowSeasonsDto>(`/api/tmdb/tvshows/${tmdbId}/seasons`)
         return response.data
     },
 }

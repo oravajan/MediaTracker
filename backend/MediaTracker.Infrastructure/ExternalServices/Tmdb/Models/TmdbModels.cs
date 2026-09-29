@@ -12,7 +12,8 @@ public record TmdbMovieResult(
 
 public record TmdbTvShowResult(
     [property: JsonPropertyName("id")] int Id,
-    [property: JsonPropertyName("name")] string? Name);
+    [property: JsonPropertyName("name")] string? Name,
+    [property: JsonPropertyName("first_air_date")] string? FirstAirDate);
 
 public record TmdbTvShowDetail(
     [property: JsonPropertyName("id")] int Id,
@@ -26,4 +27,5 @@ public record TmdbSeasonDetail(
     
 public record TmdbEpisodeResult(
     [property: JsonPropertyName("episode_number")] int EpisodeNumber,
-    [property: JsonPropertyName("name")] string? Name);
+    [property: JsonPropertyName("name")] string? Name,
+    [property: JsonPropertyName("air_date")] string? AirDate);

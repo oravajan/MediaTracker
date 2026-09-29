@@ -51,7 +51,10 @@ export const useAddSeason = (tvShowId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (dto: CreateSeasonDto) => tvShowApi.addSeason(tvShowId, dto),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            queryClient.invalidateQueries({queryKey: ['media']})
+        }
     })
 }
 
@@ -60,7 +63,10 @@ export const useUpdateSeason = (tvShowId: string) => {
     return useMutation({
         mutationFn: ({seasonId, dto}: { seasonId: string; dto: UpdateSeasonDto }) =>
             tvShowApi.updateSeason(tvShowId, seasonId, dto),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            queryClient.invalidateQueries({queryKey: ['media']})
+        }
     })
 }
 
@@ -68,7 +74,10 @@ export const useDeleteSeason = (tvShowId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (seasonId: string) => tvShowApi.deleteSeason(tvShowId, seasonId),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            queryClient.invalidateQueries({queryKey: ['media']})
+        }
     })
 }
 

@@ -7,7 +7,7 @@ public static class SeasonMapper
 {
     public static Season ToEntity(this CreateSeasonDto dto)
     {
-        return new Season(dto.SeasonNumber);
+        return new Season(dto.SeasonNumber, dto.ReleaseYear);
     }
 
 
@@ -17,6 +17,7 @@ public static class SeasonMapper
             season.Episodes
                 .OrderBy(e => e.EpisodeNumber)
                 .Select(e => e.ToDto())
-                .ToList());
+                .ToList(),
+            season.ReleaseYear);
     }
 }

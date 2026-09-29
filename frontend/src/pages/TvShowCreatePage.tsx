@@ -19,7 +19,7 @@ export default function TvShowCreatePage() {
             <p className="text-xs text-muted uppercase tracking-widest mb-2">📺 TV Show</p>
 
             <TvShowForm
-                initialData={{title: '', userRating: null, tmdbId: null}}
+                initialData={{title: '', userRating: null, tmdbId: null, releaseYear: null}}
                 onSave={data => createTvShow({
                     title: data.title,
                     userRating: data.userRating,

@@ -5,6 +5,7 @@ export interface MovieDto {
     nextMovieId: string | null;
     isWatched: boolean;
     tmdbId: number | null;
+    releaseYear: number | null;
 }
 
 export interface CreateMovieDto {
@@ -12,6 +13,7 @@ export interface CreateMovieDto {
     userRating: number | null;
     nextMovieId: string | null;
     tmdbId: number | null;
+    releaseYear: number | null;
 }
 
 export interface UpdateMovieDto {
@@ -20,6 +22,7 @@ export interface UpdateMovieDto {
     nextMovieId: string | null;
     isWatched: boolean;
     tmdbId: number | null;
+    releaseYear: number | null;
 }
 
 export interface MarkWatchedMovieDto {

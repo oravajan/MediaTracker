@@ -14,7 +14,7 @@ export default function TvShowDetailPage() {
     const {data: tvShow, isLoading} = useTvShow(id!)
     const {mutate: updateTvShow, isPending} = useUpdateTvShow()
     const [showSyncConfirm, setShowSyncConfirm] = useState(false)
-    const { mutate: syncTvShow, isPending: isSyncing } = useSyncTvShow(id!)
+    const {mutate: syncTvShow, isPending: isSyncing} = useSyncTvShow(id!)
 
     if (isLoading) return (
         <div className="flex items-center justify-center min-h-screen text-muted">
@@ -51,12 +51,17 @@ export default function TvShowDetailPage() {
 
             <TvShowForm
                 key={tvShow.id}
-                initialData={{title: tvShow.title, userRating: tvShow.userRating, tmdbId: tvShow.tmdbId}}
+                initialData={{
+                    title: tvShow.title,
+                    userRating: tvShow.userRating,
+                    tmdbId: tvShow.tmdbId,
+                    releaseYear: tvShow.releaseYear
+                }}
                 onSave={data => updateTvShow({
                     id: tvShow.id, dto: {
                         title: data.title,
                         userRating: data.userRating,
-                        tmdbId: data.tmdbId
+                        tmdbId: data.tmdbId,
                     }
                 }, {
                     onSuccess: () => {

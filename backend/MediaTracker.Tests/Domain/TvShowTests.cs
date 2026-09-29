@@ -10,7 +10,7 @@ public class TvShowTests
         => new(number, $"Episode {number}", isWatched);
 
     private static Season CreateSeason(int number)
-        => new(number);
+        => new(number, 2000);
 
     private static TvShow CreateTvShow()
         => new("Breaking Bad", null, null);

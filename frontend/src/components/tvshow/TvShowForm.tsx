@@ -29,7 +29,7 @@ export default function TvShowForm({initialData, onSave, onCancel, isSaving, tit
 
     return (
         <div className="max-w-lg">
-            <h1 className="text-2xl font-bold tracking-tight mb-8">{title}</h1>
+            <h1 className="text-2xl font-bold tracking-tight mb-8">{title}{form.releaseYear ? ` · ${form.releaseYear}` : ''}</h1>
 
             <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1.5 relative">
@@ -62,10 +62,13 @@ export default function TvShowForm({initialData, onSave, onCancel, isSaving, tit
                                     searchResults.map(result => (
                                         <button
                                             key={result.tmdbId}
-                                            className="w-full text-left px-4 py-2.5 text-sm hover:bg-card-hover transition-colors"
+                                            className="w-full text-left px-4 py-2.5 text-sm hover:bg-card-hover transition-colors flex justify-between items-center"
                                             onMouseDown={() => handleSelectResult(result)}
                                         >
                                             <span className="text-surface">{result.title}</span>
+                                            {result.releaseYear && (
+                                                <span className="text-muted text-xs">{result.releaseYear}</span>
+                                            )}
                                         </button>
                                     ))
                                 ) : (

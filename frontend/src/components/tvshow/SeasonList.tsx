@@ -11,8 +11,8 @@ interface Props {
 export default function SeasonList({tvShowId, seasons}: Props) {
     const [showAddForm, setShowAddForm] = useState(false)
     const [seasonNumber, setSeasonNumber] = useState('')
-
     const {mutate: addSeason} = useAddSeason(tvShowId)
+    const [releaseYear, setReleaseYear] = useState('')
 
     const nextSeasonNumber = seasons.length === 0
         ? 1
@@ -24,11 +24,15 @@ export default function SeasonList({tvShowId, seasons}: Props) {
     }
 
     const handleAdd = () => {
-        const num = Number(seasonNumber)
-        if (!num) return
+        if (seasonNumber === '') return
         addSeason(
-            {seasonNumber: num},
-            {onSuccess: () => setShowAddForm(false)}
+            {seasonNumber: Number(seasonNumber), releaseYear: releaseYear ? Number(releaseYear) : null},
+            {
+                onSuccess: () => {
+                    setShowAddForm(false)
+                    setReleaseYear('')
+                }
+            }
         )
     }
 
@@ -52,6 +56,13 @@ export default function SeasonList({tvShowId, seasons}: Props) {
                         value={seasonNumber}
                         onChange={e => setSeasonNumber(e.target.value)}
                         placeholder="Season #"
+                    />
+                    <input
+                        type="number"
+                        className="bg-card border border-border rounded-lg px-3 py-1.5 text-surface text-sm outline-none focus:border-accent w-24"
+                        value={releaseYear}
+                        onChange={e => setReleaseYear(e.target.value)}
+                        placeholder="Year"
                     />
                     <button
                         onClick={handleAdd}

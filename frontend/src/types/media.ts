@@ -6,4 +6,5 @@ export interface MediaSummaryDto {
     isWatched: boolean;
     watchedEpisodeCount: number | null;
     totalEpisodeCount: number | null;
+    releaseYear: number | null;
 }

@@ -25,7 +25,7 @@ public class MovieServiceTests
         int? userRating = null,
         Guid? nextMovieId = null,
         bool isWatched = false)
-        => new(title, userRating, null, isWatched, null);
+        => new(title, userRating, null, isWatched, null, 2000);
 
     [Fact]
     public async Task GetByIdAsync_WithExistingMovie_ReturnsMovieDto()
@@ -59,7 +59,7 @@ public class MovieServiceTests
     [Fact]
     public async Task AddAsync_WithValidDto_AddsMovieAndReturnsDto()
     {
-        var dto = new CreateMovieDto("Inception", null, null, null);
+        var dto = new CreateMovieDto("Inception", null, null, null, 2000);
         _repositoryMock
             .Setup(r => r.AddMovieAsync(It.IsAny<Movie>()))
             .Returns(Task.CompletedTask);
@@ -83,7 +83,8 @@ public class MovieServiceTests
             .Setup(r => r.GetMovieByIdAsync(id))
             .ReturnsAsync((Movie?)null);
 
-        var act = async () => await _service.UpdateAsync(id, new UpdateMovieDto("Inception", null, null, false, null));
+        var act = async () =>
+            await _service.UpdateAsync(id, new UpdateMovieDto("Inception", null, null, false, null, 2000));
 
         await act.Should().ThrowAsync<NotFoundException>();
     }
@@ -104,7 +105,7 @@ public class MovieServiceTests
         // movie1 -> movie2 -> movie1 = circular reference
         var act = async () => await _service.UpdateAsync(
             movie1.Id,
-            new UpdateMovieDto("Inception", null, movie2.Id, false, null));
+            new UpdateMovieDto("Inception", null, movie2.Id, false, null, 2000));
 
         await act.Should().ThrowAsync<DomainException>()
             .WithMessage("*circular*");
@@ -121,7 +122,7 @@ public class MovieServiceTests
             .Setup(r => r.SaveChangesAsync())
             .Returns(Task.CompletedTask);
 
-        await _service.UpdateAsync(movie.Id, new UpdateMovieDto("Inception 2", 9, null, false, null));
+        await _service.UpdateAsync(movie.Id, new UpdateMovieDto("Inception 2", 9, null, false, null, 2000));
 
         _repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
     }

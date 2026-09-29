@@ -11,14 +11,14 @@ public class MovieTests
         int? userRating = null,
         Guid? nextMovieId = null,
         bool isWatched = false)
-        => new(title, userRating, nextMovieId, isWatched, null);
+        => new(title, userRating, nextMovieId, isWatched, null, 2000);
 
     [Fact]
     public void Update_WithValidData_UpdatesProperties()
     {
         var movie = CreateMovie();
 
-        movie.Update("Inception 2", 9, null, true, null);
+        movie.Update("Inception 2", 9, null, true, null, 2000);
 
         movie.Title.Should().Be("Inception 2");
         movie.UserRating.Should().Be(9);
@@ -30,7 +30,7 @@ public class MovieTests
     {
         var movie = CreateMovie();
 
-        var act = () => movie.Update("", null, null, false, null);
+        var act = () => movie.Update("", null, null, false, null, 2000);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*empty*");
@@ -41,7 +41,7 @@ public class MovieTests
     {
         var movie = CreateMovie();
 
-        var act = () => movie.Update("Inception", 0, null, false, null);
+        var act = () => movie.Update("Inception", 0, null, false, null, 2000);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*between 1 and 10*");
@@ -52,7 +52,7 @@ public class MovieTests
     {
         var movie = CreateMovie();
 
-        var act = () => movie.Update("Inception", 11, null, false, null);
+        var act = () => movie.Update("Inception", 11, null, false, null, 2000);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*between 1 and 10*");
@@ -63,7 +63,7 @@ public class MovieTests
     {
         var movie = CreateMovie();
 
-        var act = () => movie.Update("Inception", null, movie.Id, false, null);
+        var act = () => movie.Update("Inception", null, movie.Id, false, null, 2000);
 
         act.Should().Throw<DomainException>();
     }
@@ -81,7 +81,7 @@ public class MovieTests
     [Fact]
     public void Constructor_WithEmptyTitle_ThrowsDomainException()
     {
-        var act = () => new Movie("", null, null, false, null);
+        var act = () => new Movie("", null, null, false, null, 2000);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*empty*");
@@ -92,7 +92,7 @@ public class MovieTests
     {
         var id = Guid.Empty;
 
-        var act = () => new Movie("Inception", null, id, false, null);
+        var act = () => new Movie("Inception", null, id, false, null, 2000);
 
         act.Should().Throw<DomainException>();
     }

@@ -31,7 +31,7 @@ export default function MovieForm({initialData, excludeId, onSave, onCancel, isS
     }
 
     const handleSelectResult = (result: TmdbMovieSearchDto) => {
-        setForm(f => ({...f, title: result.title, tmdbId: result.tmdbId}))
+        setForm(f => ({...f, title: result.title, tmdbId: result.tmdbId, releaseYear: result.releaseYear}))
         setShowResults(false)
     }
 
@@ -84,6 +84,23 @@ export default function MovieForm({initialData, excludeId, onSave, onCancel, isS
                             </div>
                         </>
                     )}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-medium text-muted uppercase tracking-widest">
+                        Year <span className="normal-case font-normal">(optional)</span>
+                    </label>
+                    <input
+                        className="bg-card border border-border rounded-lg px-3.5 py-2.5 text-surface text-sm outline-none focus:border-accent transition-colors w-28"
+                        type="number"
+                        min={1888}
+                        value={form.releaseYear ?? ''}
+                        onChange={e => setForm(f => ({
+                            ...f,
+                            releaseYear: e.target.value ? Number(e.target.value) : null
+                        }))}
+                        placeholder="—"
+                    />
                 </div>
 
                 <div className="flex flex-col gap-1.5 relative">

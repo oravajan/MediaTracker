@@ -40,7 +40,8 @@ export default function MovieDetailPage() {
                     userRating: movie.userRating,
                     nextMovieId: movie.nextMovieId,
                     isWatched: movie.isWatched,
-                    tmdbId: movie.tmdbId
+                    tmdbId: movie.tmdbId,
+                    releaseYear: movie.releaseYear
                 }}
                 excludeId={movie.id}
                 showWatched={true}
@@ -50,7 +51,8 @@ export default function MovieDetailPage() {
                         userRating: data.userRating,
                         nextMovieId: data.nextMovieId,
                         isWatched: data.isWatched ?? false,
-                        tmdbId: data.tmdbId
+                        tmdbId: data.tmdbId,
+                        releaseYear: data.releaseYear
                     }
                 }, {
                     onSuccess: () => {

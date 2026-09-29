@@ -24,13 +24,15 @@ export default function MovieCreatePage() {
                     userRating: null,
                     nextMovieId: null,
                     isWatched: false,
-                    tmdbId: null
+                    tmdbId: null,
+                    releaseYear: null
                 }}
                 onSave={data => createMovie({
                     title: data.title,
                     userRating: data.userRating,
                     nextMovieId: data.nextMovieId,
-                    tmdbId: data.tmdbId
+                    tmdbId: data.tmdbId,
+                    releaseYear: data.releaseYear
                 }, {
                     onSuccess: () => {
                         toast.success('Movie saved successfully.')

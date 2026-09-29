@@ -10,6 +10,9 @@ public class TvShow : Media
     public int TotalEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count();
     public int WatchedEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count(e => e.IsWatched);
     public bool IsWatched => TotalEpisodeCount > 0 && WatchedEpisodeCount == TotalEpisodeCount;
+    public int? ReleaseYear => Seasons
+        .Where(s => s.SeasonNumber > 0)
+        .Min(s => s.ReleaseYear);
 
     public TvShow(string title, int? userRating, int? tmdbId) : base(title, userRating, tmdbId)
     {

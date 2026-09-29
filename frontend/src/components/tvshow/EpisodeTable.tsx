@@ -36,7 +36,6 @@ export default function EpisodeTable({tvShowId, season}: Props) {
 
     const handleAdd = () => {
         const num = Number(addForm.episodeNumber)
-        if (!num) return
         addEpisode(
             {seasonId: season.id, dto: {episodeNumber: num, title: addForm.title || null, isWatched: false}},
             {
@@ -55,7 +54,6 @@ export default function EpisodeTable({tvShowId, season}: Props) {
 
     const handleUpdate = (ep: EpisodeDto) => {
         const num = Number(editForm.episodeNumber)
-        if (!num) return
         updateEpisode(
             {
                 seasonId: season.id,

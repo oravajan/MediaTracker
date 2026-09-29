@@ -17,6 +17,6 @@ public static class TvShowMapper
                 .OrderBy(s => s.SeasonNumber)
                 .Select(s => s.ToDto())
                 .ToList(),
-            tvShow.TmdbId);
+            tvShow.TmdbId, tvShow.ReleaseYear);
     }
 }

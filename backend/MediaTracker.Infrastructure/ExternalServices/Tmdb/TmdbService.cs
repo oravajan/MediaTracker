@@ -4,6 +4,7 @@ using MediaTracker.Application.DTOs;
 using MediaTracker.Application.Interfaces;
 using MediaTracker.Infrastructure.ExternalServices.Tmdb.Models;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace MediaTracker.Infrastructure.ExternalServices.Tmdb;
 
@@ -52,7 +53,8 @@ public class TmdbService : ITmdbService
 
         return response?.Results.Select(t => new TmdbTvShowSearchDto(
                    t.Id,
-                   t.Name ?? string.Empty))
+                   t.Name ?? string.Empty,
+                   ParseYear(t.FirstAirDate)))
                ?? Enumerable.Empty<TmdbTvShowSearchDto>();
     }
 
@@ -68,57 +70,44 @@ public class TmdbService : ITmdbService
         if (response is null)
             return null;
 
-        var seasonNumbers = response.Seasons
-            .Where(s => s.SeasonNumber >= 0)
-            .Select(s => s.SeasonNumber)
+        var releasedSeasons = response.Seasons
+            .Where(s => s.SeasonNumber > 0 && IsReleased(s.AirDate))
             .ToList();
 
-        // Fetch episode details for all seasons in parallel
-        var seasonDetailTasks = seasonNumbers.Select(seasonNumber => GetSeasonEpisodesAsync(tmdbId, seasonNumber));
-        var seasonDetails = await Task.WhenAll(seasonDetailTasks);
+        var seasonDetails = await Task.WhenAll(
+            releasedSeasons.Select(s => GetSeasonEpisodesAsync(tmdbId, s.SeasonNumber)));
 
-        var seasons = response.Seasons
-            .Where(s => s.SeasonNumber > 0)
-            .Select(s =>
-            {
-                var episodes = seasonDetails
-                    .FirstOrDefault(d => d?.SeasonNumber == s.SeasonNumber)
-                    ?.Episodes ?? new List<TmdbEpisodeInfoDto>();
-
-                return new TmdbSeasonInfoDto(
-                    s.SeasonNumber,
-                    ParseYear(s.AirDate),
-                    episodes);
-            })
+        var seasons = releasedSeasons
+            .Select(s => new TmdbSeasonInfoDto(
+                s.SeasonNumber,
+                ParseYear(s.AirDate),
+                seasonDetails.First(d => d.SeasonNumber == s.SeasonNumber).Episodes))
             .ToList();
 
         return new TmdbTvShowSeasonsDto(response.Id, response.Name, seasons);
     }
 
     // Fetches episode names for a single season - returns empty list on failure so sync can fall back
-    private async Task<(int SeasonNumber, List<TmdbEpisodeInfoDto> Episodes)?> GetSeasonEpisodesAsync(
+    private async Task<(int SeasonNumber, List<TmdbEpisodeInfoDto> Episodes)> GetSeasonEpisodesAsync(
         int tmdbId, int seasonNumber)
     {
-        try
-        {
-            var detail = await _httpClient.GetFromJsonAsync<TmdbSeasonDetail>(
-                $"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ",
-                JsonOptions);
+        var detail = await _httpClient.GetFromJsonAsync<TmdbSeasonDetail>(
+            $"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ",
+            JsonOptions);
 
-            var episodes = detail?.Episodes
-                .Select(e => new TmdbEpisodeInfoDto(e.EpisodeNumber, e.Name))
-                .ToList() ?? new List<TmdbEpisodeInfoDto>();
+        var episodes = detail?.Episodes
+            .Where(e => IsReleased(e.AirDate))
+            .Select(e => new TmdbEpisodeInfoDto(e.EpisodeNumber, e.Name))
+            .ToList() ?? new List<TmdbEpisodeInfoDto>();
 
-            return (seasonNumber, episodes);
-        }
-        catch
-        {
-            // If a single season fails, fall back to unnamed episodes for that season
-            return (seasonNumber, new List<TmdbEpisodeInfoDto>());
-        }
+        return (seasonNumber, episodes);
     }
 
     // Parses "2008-01-20" -> 2008
     private static int? ParseYear(string? date)
         => int.TryParse(date?.Split('-').FirstOrDefault(), out var year) ? year : null;
+    
+    private static bool IsReleased(string? date)
+        => DateOnly.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d)
+           && d <= DateOnly.FromDateTime(DateTime.UtcNow);
 }

@@ -25,14 +25,17 @@ export interface SeasonDto {
     id: string;
     seasonNumber: number;
     episodes: EpisodeDto[];
+    releaseYear: number | null;
 }
 
 export interface CreateSeasonDto {
     seasonNumber: number;
+    releaseYear: number | null;
 }
 
 export interface UpdateSeasonDto {
     seasonNumber: number;
+    releaseYear: number | null;
 }
 
 export interface TvShowDto {
@@ -41,6 +44,7 @@ export interface TvShowDto {
     userRating: number | null;
     seasons: SeasonDto[];
     tmdbId: number | null;
+    releaseYear: number | null;
 }
 
 export interface CreateTvShowDto {

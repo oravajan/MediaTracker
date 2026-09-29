@@ -44,7 +44,7 @@ public class MovieService : IMovieService
         
         await ValidateNoCircularReferenceAsync(id, dto.NextMovieId);
         
-        movie.Update(dto.Title, dto.UserRating, dto.NextMovieId, dto.IsWatched, dto.TmdbId);
+        movie.Update(dto.Title, dto.UserRating, dto.NextMovieId, dto.IsWatched, dto.TmdbId, dto.ReleaseYear);
         await _mediaRepository.SaveChangesAsync();
         return await GetByIdAsync(id);
     }

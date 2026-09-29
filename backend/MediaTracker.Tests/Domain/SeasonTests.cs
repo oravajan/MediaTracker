@@ -10,7 +10,7 @@ public class SeasonTests
         => new(number, $"Episode {number}", isWatched);
 
     private static Season CreateSeason(int number = 1)
-        => new(number);
+        => new(number, 2000);
 
     [Fact]
     public void Constructor_WithValidData_CreatesSeason()
@@ -24,7 +24,7 @@ public class SeasonTests
     [Fact]
     public void Constructor_WithInvalidSeasonNumber_ThrowsDomainException()
     {
-        var act = () => new Season(-1);
+        var act = () => new Season(-1, 2000);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*greater than or equal to 0*");
@@ -35,7 +35,7 @@ public class SeasonTests
     {
         var season = CreateSeason(1);
 
-        season.Update(2);
+        season.Update(2, 2000);
 
         season.SeasonNumber.Should().Be(2);
     }
@@ -45,7 +45,7 @@ public class SeasonTests
     {
         var season = CreateSeason(1);
 
-        var act = () => season.Update(-1);
+        var act = () => season.Update(-1, 2000);
 
         act.Should().Throw<DomainException>()
             .WithMessage("*greater than or equal to 0*");

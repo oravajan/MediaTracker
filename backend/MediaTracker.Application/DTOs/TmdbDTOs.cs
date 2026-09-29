@@ -7,7 +7,8 @@ public record TmdbMovieSearchDto(
 
 public record TmdbTvShowSearchDto(
     int TmdbId,
-    string Title);
+    string Title,
+    int? ReleaseYear);
 
 public record TmdbTvShowSeasonsDto(
     int TmdbId,

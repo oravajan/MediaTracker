@@ -66,7 +66,7 @@ public class TvShowService : ITvShowService
         if (season is null)
             throw new NotFoundException($"Season with id {seasonId} was not found.");
 
-        season.Update(dto.SeasonNumber);
+        season.Update(dto.SeasonNumber, dto.ReleaseYear);
         await _mediaRepository.SaveChangesAsync();
         return season.ToDto();
     }
@@ -132,7 +132,7 @@ public class TvShowService : ITvShowService
 
         var seasons = tmdbData.Seasons.Select(s =>
         {
-            var season = new Season(s.SeasonNumber);
+            var season = new Season(s.SeasonNumber, s.ReleaseYear);
 
             foreach (var episode in s.Episodes)
                 season.AddEpisode(new Episode(episode.EpisodeNumber, episode.Title, false));
