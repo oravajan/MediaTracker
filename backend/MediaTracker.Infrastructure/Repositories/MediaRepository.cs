@@ -83,6 +83,14 @@ public class MediaRepository : IMediaRepository
         return await _context.Season.FirstOrDefaultAsync(s => s.Id == seasonId);
     }
 
+    public async Task<Season?> GetSeasonWithEpisodesAsync(Guid seasonId)
+    {
+        return await _context.Season
+            .Include(s => s.Episodes)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(s => s.Id == seasonId);
+    }
+
     public async Task DeleteSeasonAsync(Guid seasonId)
     {
         var season = await GetSeasonByIdAsync(seasonId);

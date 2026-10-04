@@ -17,6 +17,7 @@ public interface IMediaRepository
     Task AddTvShowAsync(TvShow tvShow);
 
     Task<Season?> GetSeasonByIdAsync(Guid seasonId);
+    Task<Season?> GetSeasonWithEpisodesAsync(Guid seasonId);
     Task DeleteSeasonAsync(Guid seasonId);
     Task<Episode?> GetEpisodeByIdAsync(Guid episodeId);
     Task DeleteEpisodeAsync(Guid episodeId);

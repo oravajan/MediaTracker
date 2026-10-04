@@ -79,7 +79,7 @@ public class TvShowService : ITvShowService
 
     public async Task<EpisodeDto> AddEpisodeAsync(Guid seasonId, CreateEpisodeDto dto)
     {
-        var season = await _mediaRepository.GetSeasonByIdAsync(seasonId);
+        var season = await _mediaRepository.GetSeasonWithEpisodesAsync(seasonId);
         if (season is null)
             throw new NotFoundException($"Season with id {seasonId} was not found.");
 
