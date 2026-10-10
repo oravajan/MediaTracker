@@ -28,8 +28,7 @@ public class MediaService : IMediaService
 
     public async Task<MediaSummaryDto> WatchAsync(Guid id)
     {
-        var allMediaWithDetail = await _mediaRepository.GetAllAsync();
-        var media = allMediaWithDetail.FirstOrDefault(m => m.Id == id);
+        var media = await _mediaRepository.GetByIdAsync(id);
         if (media is null)
             throw new NotFoundException($"Media with id {id} was not found.");
 

@@ -25,12 +25,16 @@ public class MediaRepository : IMediaRepository
 
     public async Task<Media?> GetByIdAsync(Guid id)
     {
-        return await _context.Media.FirstOrDefaultAsync(m => m.Id == id);
+        return await _context.Media
+            .Include(m => (m as TvShow)!.Seasons)
+            .ThenInclude(s => s.Episodes)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(m => m.Id == id);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var media = await GetByIdAsync(id);
+        var media = await _context.Media.FindAsync(id);
         if (media != null)
             _context.Media.Remove(media);
     }
