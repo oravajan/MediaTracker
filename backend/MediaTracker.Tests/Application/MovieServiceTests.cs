@@ -126,34 +126,4 @@ public class MovieServiceTests
 
         _repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
     }
-
-    [Fact]
-    public async Task MarkWatchedAsync_WithExistingMovie_UpdatesIsWatched()
-    {
-        var movie = CreateMovie();
-        _repositoryMock
-            .Setup(r => r.GetMovieByIdAsync(movie.Id))
-            .ReturnsAsync(movie);
-        _repositoryMock
-            .Setup(r => r.SaveChangesAsync())
-            .Returns(Task.CompletedTask);
-
-        var result = await _service.MarkWatchedAsync(movie.Id, new MarkWatchedMovieDto(true));
-
-        result.IsWatched.Should().BeTrue();
-        _repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
-    }
-
-    [Fact]
-    public async Task MarkWatchedAsync_WithNonExistingMovie_ThrowsNotFoundException()
-    {
-        var id = Guid.NewGuid();
-        _repositoryMock
-            .Setup(r => r.GetMovieByIdAsync(id))
-            .ReturnsAsync((Movie?)null);
-
-        var act = async () => await _service.MarkWatchedAsync(id, new MarkWatchedMovieDto(true));
-
-        await act.Should().ThrowAsync<NotFoundException>();
-    }
 }

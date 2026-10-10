@@ -24,7 +24,3 @@ export interface UpdateMovieDto {
     tmdbId: number | null;
     releaseYear: number | null;
 }
-
-export interface MarkWatchedMovieDto {
-    isWatched: boolean;
-}

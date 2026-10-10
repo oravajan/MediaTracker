@@ -48,17 +48,6 @@ public class MovieService : IMovieService
         await _mediaRepository.SaveChangesAsync();
         return await GetByIdAsync(id);
     }
-
-    public async Task<MovieDto> MarkWatchedAsync(Guid movieId, MarkWatchedMovieDto dto)
-    {
-        var movie = await _mediaRepository.GetMovieByIdAsync(movieId);
-        if (movie is null)
-            throw new NotFoundException($"Movie with id {movieId} was not found.");
-
-        movie.MarkWatched(dto.IsWatched);
-        await _mediaRepository.SaveChangesAsync();
-        return movie.ToDto();
-    }
     
     private async Task ValidateNoCircularReferenceAsync(Guid movieId, Guid? nextMovieId)
     {

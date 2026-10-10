@@ -7,5 +7,4 @@ public interface IMovieService
     Task<MovieDto> GetByIdAsync(Guid id);
     Task<MovieDto> AddAsync(CreateMovieDto dto);
     Task<MovieDto> UpdateAsync(Guid id, UpdateMovieDto dto);
-    Task<MovieDto> MarkWatchedAsync(Guid movieId, MarkWatchedMovieDto dto);
 }
