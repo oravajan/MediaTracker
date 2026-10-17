@@ -86,6 +86,40 @@ public class TmdbService : ITmdbService
 
         return new TmdbTvShowSeasonsDto(response.Id, response.Name, seasons);
     }
+    
+    public async Task<TmdbMovieSearchDto?> GetNextMovieAsync(int tmdbId)
+    {
+        if (!_isConfigured)
+            return null;
+
+        var movie = await _httpClient.GetFromJsonAsync<TmdbMovieDetail>($"movie/{tmdbId}", JsonOptions);
+        var collectionId = movie?.BelongsToCollection?.Id;
+        if (collectionId is null)
+            return null;
+
+        var collection = await _httpClient.GetFromJsonAsync<TmdbCollectionDetail>(
+            $"collection/{collectionId}?language=cs-CZ", JsonOptions);
+        if (collection is null)
+            return null;
+
+        var dated = collection.Parts
+            .Select(p => (Part: p, Date: ParseDate(p.ReleaseDate)))
+            .Where(x => x.Date.HasValue && x.Date.Value <= DateOnly.FromDateTime(DateTime.UtcNow))
+            .OrderBy(x => x.Date)
+            .ToList();
+
+        var index = dated.FindIndex(x => x.Part.Id == tmdbId);
+        if (index < 0 || index + 1 >= dated.Count)
+            return null;
+
+        var next = dated[index + 1];
+        if (string.IsNullOrWhiteSpace(next.Part.Title))
+            return null;
+
+        return new TmdbMovieSearchDto(next.Part.Id, next.Part.Title, next.Date.Value.Year);
+    }
+
+    
 
     // Fetches episode names for a single season - returns empty list on failure so sync can fall back
     private async Task<(int SeasonNumber, List<TmdbEpisodeInfoDto> Episodes)> GetSeasonEpisodesAsync(
@@ -106,6 +140,9 @@ public class TmdbService : ITmdbService
     // Parses "2008-01-20" -> 2008
     private static int? ParseYear(string? date)
         => int.TryParse(date?.Split('-').FirstOrDefault(), out var year) ? year : null;
+    
+    private static DateOnly? ParseDate(string? date)
+        => DateOnly.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d) ? d : null;
     
     private static bool IsReleased(string? date)
         => DateOnly.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d)

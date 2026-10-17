@@ -29,3 +29,17 @@ public record TmdbEpisodeResult(
     [property: JsonPropertyName("episode_number")] int EpisodeNumber,
     [property: JsonPropertyName("name")] string? Name,
     [property: JsonPropertyName("air_date")] string? AirDate);
+
+public record TmdbMovieDetail(
+    [property: JsonPropertyName("belongs_to_collection")] TmdbCollectionRef? BelongsToCollection);
+
+public record TmdbCollectionRef(
+    [property: JsonPropertyName("id")] int Id);
+
+public record TmdbCollectionDetail(
+    [property: JsonPropertyName("parts")] List<TmdbCollectionPart> Parts);
+
+public record TmdbCollectionPart(
+    [property: JsonPropertyName("id")] int Id,
+    [property: JsonPropertyName("title")] string? Title,
+    [property: JsonPropertyName("release_date")] string? ReleaseDate);

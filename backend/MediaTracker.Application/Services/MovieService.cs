@@ -9,10 +9,12 @@ namespace MediaTracker.Application.Services;
 public class MovieService : IMovieService
 {
     private readonly IMediaRepository _mediaRepository;
+    private readonly INextMovieLinker _nextMovieLinker;
 
-    public MovieService(IMediaRepository mediaRepository)
+    public MovieService(IMediaRepository mediaRepository, INextMovieLinker nextMovieLinker)
     {
         _mediaRepository = mediaRepository;
+        _nextMovieLinker = nextMovieLinker;
     }
 
     public async Task<MovieDto> GetByIdAsync(Guid id)
@@ -42,27 +44,16 @@ public class MovieService : IMovieService
         if (movie is null)
             throw new NotFoundException($"Movie with id {id} was not found.");
         
-        await ValidateNoCircularReferenceAsync(id, dto.NextMovieId);
+        if (await _nextMovieLinker.WouldCreateCycleAsync(id, dto.NextMovieId))
+            throw new DomainException("Setting this movie as next would create a circular reference.");
         
+        var wasWatched = movie.IsWatched;
         movie.Update(dto.Title, dto.UserRating, dto.NextMovieId, dto.IsWatched, dto.TmdbId, dto.ReleaseYear);
         await _mediaRepository.SaveChangesAsync();
+        
+        if (!wasWatched && movie.IsWatched)
+            await _nextMovieLinker.TryLinkAsync(movie);
+        
         return await GetByIdAsync(id);
-    }
-    
-    private async Task ValidateNoCircularReferenceAsync(Guid movieId, Guid? nextMovieId)
-    {
-        if (nextMovieId is null) return;
-
-        var visited = new HashSet<Guid> { movieId };
-        var currentId = nextMovieId;
-
-        while (currentId is not null)
-        {
-            if (!visited.Add(currentId.Value))
-                throw new DomainException("Setting this movie as next would create a circular reference.");
-
-            var current = await _mediaRepository.GetMovieByIdAsync(currentId.Value);
-            currentId = current?.NextMovieId;
-        }
     }
 }

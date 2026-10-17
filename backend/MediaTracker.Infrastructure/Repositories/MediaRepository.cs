@@ -46,6 +46,14 @@ public class MediaRepository : IMediaRepository
             .Include(m => m.NextMovie)
             .FirstOrDefaultAsync(m => m.Id == id);
     }
+    
+    public async Task<Movie?> GetMovieByTmdbIdAsync(int tmdbId)
+    {
+        return await _context.Media
+            .OfType<Movie>()
+            .Include(m => m.NextMovie)
+            .FirstOrDefaultAsync(m => m.TmdbId == tmdbId);
+    }
 
     public async Task AddMovieAsync(Movie movie)
     {

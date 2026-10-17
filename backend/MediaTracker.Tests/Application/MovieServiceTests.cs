@@ -12,12 +12,14 @@ namespace MediaTracker.Tests.Application;
 public class MovieServiceTests
 {
     private readonly Mock<IMediaRepository> _repositoryMock;
+    private readonly Mock<INextMovieLinker> _nextMovieLinkerMock;
     private readonly MovieService _service;
 
     public MovieServiceTests()
     {
         _repositoryMock = new Mock<IMediaRepository>();
-        _service = new MovieService(_repositoryMock.Object);
+        _nextMovieLinkerMock = new Mock<INextMovieLinker>();
+        _service = new MovieService(_repositoryMock.Object, _nextMovieLinkerMock.Object);
     }
 
     private static Movie CreateMovie(
@@ -101,6 +103,7 @@ public class MovieServiceTests
         _repositoryMock
             .Setup(r => r.GetMovieByIdAsync(movie2.Id))
             .ReturnsAsync(movie2);
+        _nextMovieLinkerMock.Setup(l => l.WouldCreateCycleAsync(movie1.Id, movie2.Id)).ReturnsAsync(true);
 
         // movie1 -> movie2 -> movie1 = circular reference
         var act = async () => await _service.UpdateAsync(

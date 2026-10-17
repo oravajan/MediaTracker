@@ -24,6 +24,7 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ITvShowService, TvShowService>();
+builder.Services.AddScoped<INextMovieLinker, NextMovieLinker>();
 
 // Front-end CORS
 builder.Services.AddCors(options =>

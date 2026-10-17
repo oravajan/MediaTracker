@@ -41,6 +41,12 @@ public class Movie : Media
     {
         IsWatched = isWatched;
     }
+    
+    public void SetNextMovie(Guid nextMovieId)
+    {
+        ValidateNextMovieId(nextMovieId);
+        NextMovieId = nextMovieId;
+    }
 
     private void ValidateNextMovieId(Guid? nextMovieId)
     {

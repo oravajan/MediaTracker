@@ -8,4 +8,5 @@ public interface ITmdbService
     Task<IEnumerable<TmdbMovieSearchDto>> SearchMoviesAsync(string query);
     Task<IEnumerable<TmdbTvShowSearchDto>> SearchTvShowsAsync(string query);
     Task<TmdbTvShowSeasonsDto?> GetTvShowSeasonsAsync(int tmdbId);
+    Task<TmdbMovieSearchDto?> GetNextMovieAsync(int tmdbId);
 }

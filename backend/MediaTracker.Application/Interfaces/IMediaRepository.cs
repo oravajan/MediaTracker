@@ -9,6 +9,7 @@ public interface IMediaRepository
     Task DeleteAsync(Guid id);
 
     Task<Movie?> GetMovieByIdAsync(Guid id);
+    Task<Movie?> GetMovieByTmdbIdAsync(int tmdbId);
     Task AddMovieAsync(Movie movie);
 
     Task<TvShow?> GetTvShowByIdAsync(Guid id);
