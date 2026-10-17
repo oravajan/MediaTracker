@@ -21,9 +21,10 @@ export const useWatchMedia = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: mediaApi.watch,
-        onSuccess: (_, id) => {
-            void queryClient.invalidateQueries({ queryKey: ['media'] })
-            void queryClient.invalidateQueries({ queryKey: ['tvshows', id] })
+        onSuccess: (media) => {
+            const detailKey = media.type === 'Movie' ? 'movies' : 'tvshows'
+            queryClient.removeQueries({queryKey: [detailKey, media.id]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
         },
     })
 }

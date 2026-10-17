@@ -6,7 +6,7 @@ export const useTmdbStatus = () => {
     return useQuery({
         queryKey: ['tmdb-status'],
         queryFn: tmdbApi.isConfigured,
-        staleTime: Infinity,  // nepotřebuje se refetchovat
+        staleTime: Infinity,
     })
 }
 
