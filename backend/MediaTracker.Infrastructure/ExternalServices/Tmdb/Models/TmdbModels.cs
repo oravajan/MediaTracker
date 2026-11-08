@@ -23,7 +23,8 @@ public record TmdbTvShowDetail(
 public record TmdbSeasonDetail(
     [property: JsonPropertyName("season_number")] int SeasonNumber,
     [property: JsonPropertyName("air_date")] string? AirDate,
-    [property: JsonPropertyName("episodes")] List<TmdbEpisodeResult> Episodes);
+    [property: JsonPropertyName("episode_count")] int EpisodeCount,
+    [property: JsonPropertyName("episodes")] List<TmdbEpisodeResult>? Episodes);
     
 public record TmdbEpisodeResult(
     [property: JsonPropertyName("episode_number")] int EpisodeNumber,

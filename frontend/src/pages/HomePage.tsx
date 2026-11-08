@@ -1,9 +1,10 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useMedia, useDeleteMedia, useWatchMedia} from '../hooks/useMedia'
+import {useMedia, useDeleteMedia, useWatchMedia, useMediaUpdateStatus, useStartMediaUpdate} from '../hooks/useMedia'
 import MediaTable from '../components/media/MediaTable'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import type {MediaSummaryDto} from '../types/media'
+import {useTmdbStatus} from "../hooks/useTmdb.ts";
 
 type FilterType = 'All' | 'Movie' | 'TvShow'
 
@@ -21,6 +22,10 @@ export default function HomePage() {
     const {data: media, isLoading, isError} = useMedia()
     const {mutate: deleteMedia} = useDeleteMedia()
     const {mutate: watchMedia} = useWatchMedia()
+
+    const {data: tmdbConfigured} = useTmdbStatus()
+    const {data: isUpdating} = useMediaUpdateStatus()
+    const {mutate: startUpdate, isPending: isStarting} = useStartMediaUpdate()
 
     const filtered = media?.filter(m =>
         activeFilter === 'All' ? true : m.type === activeFilter
@@ -62,6 +67,13 @@ export default function HomePage() {
                         className="px-4 py-2 bg-accent text-base rounded-lg text-sm font-semibold hover:bg-accent-dim transition-colors"
                     >
                         + TV Show
+                    </button>
+                    <button
+                        onClick={() => startUpdate()}
+                        disabled={!tmdbConfigured || isUpdating || isStarting}
+                        className="px-4 py-2 text-sm text-muted border border-border rounded-lg hover:border-accent hover:text-accent transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        {isUpdating ? 'Updating...' : 'Check for updates'}
                     </button>
                 </div>
             </header>

@@ -130,17 +130,7 @@ public class TvShowService : ITvShowService
         if (tmdbData is null)
             throw new NotFoundException($"TV Show with TMDB id {tvShow.TmdbId} was not found.");
 
-        var seasons = tmdbData.Seasons.Select(s =>
-        {
-            var season = new Season(s.SeasonNumber, s.ReleaseYear);
-
-            foreach (var episode in s.Episodes)
-                season.AddEpisode(new Episode(episode.EpisodeNumber, episode.Title, false));
-            
-            return season;
-        }).ToList();
-
-        tvShow.ReplaceSeasons(seasons);
+        tvShow.ReplaceSeasons(tmdbData.Seasons.Select(s => s.ToEntity()));
         await _mediaRepository.SaveChangesAsync();
     }
 }

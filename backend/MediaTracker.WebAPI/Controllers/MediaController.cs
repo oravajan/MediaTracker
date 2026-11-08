@@ -1,5 +1,6 @@
 ﻿using MediaTracker.Application.DTOs;
 using MediaTracker.Application.Interfaces;
+using MediaTracker.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaTracker.WebAPI.Controllers;
@@ -9,10 +10,15 @@ namespace MediaTracker.WebAPI.Controllers;
 public class MediaController : ControllerBase
 {
     private readonly IMediaService _mediaService;
+    private readonly ITmdbService _tmdbService;
+    private readonly MediaUpdateRunner _updateRunner;
 
-    public MediaController(IMediaService mediaService)
+    public MediaController(IMediaService mediaService, ITmdbService tmdbService,
+        MediaUpdateRunner updateRunner)
     {
         _mediaService = mediaService;
+        _tmdbService = tmdbService;
+        _updateRunner = updateRunner;
     }
 
     [HttpGet]
@@ -35,4 +41,19 @@ public class MediaController : ControllerBase
         var result = await _mediaService.WatchAsync(id);
         return Ok(result);
     }
+    
+    [HttpPost("update")]
+    public ActionResult StartUpdate()
+    {
+        if (!_tmdbService.IsConfigured)
+            return BadRequest(new { error = "TMDB is not configured." });
+
+        return _updateRunner.TryStart()
+            ? Accepted()
+            : Conflict(new { error = "Update is already running." });
+    }
+
+    [HttpGet("update/status")]
+    public ActionResult<bool> GetUpdateStatus()
+        => Ok(_updateRunner.IsRunning);
 }

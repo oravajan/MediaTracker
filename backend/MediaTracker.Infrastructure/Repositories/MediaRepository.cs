@@ -22,6 +22,11 @@ public class MediaRepository : IMediaRepository
             .AsSplitQuery()
             .ToListAsync();
     }
+    
+    public async Task<List<Guid>> GetAllIdsAsync()
+    {
+        return await _context.Media.Select(m => m.Id).ToListAsync();
+    }
 
     public async Task<Media?> GetByIdAsync(Guid id)
     {

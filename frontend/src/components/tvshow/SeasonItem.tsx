@@ -18,6 +18,8 @@ export default function SeasonItem({tvShowId, season}: Props) {
     const {mutate: updateSeason} = useUpdateSeason(tvShowId)
     const {mutate: deleteSeason} = useDeleteSeason(tvShowId)
 
+    const label = season.seasonNumber === 0 ? 'Specials' : `Season ${season.seasonNumber}`
+
     const handleUpdate = () => {
         if (seasonNumber === '') return
         updateSeason(
@@ -63,7 +65,7 @@ export default function SeasonItem({tvShowId, season}: Props) {
                 ) : (
                     <>
                         <div className="flex items-baseline gap-2">
-                            <span className="font-semibold text-sm">Season {season.seasonNumber}</span>
+                            <span className="font-semibold text-sm">{label}</span>
                             {season.releaseYear && <span className="text-xs text-muted">{season.releaseYear}</span>}
                         </div>
                         <div className="flex gap-1">
@@ -92,7 +94,7 @@ export default function SeasonItem({tvShowId, season}: Props) {
 
             {showDeleteConfirm && (
                 <ConfirmDialog
-                    message={`Delete Season ${season.seasonNumber} and all its episodes?`}
+                    message={`Delete ${label} and all its episodes?`}
                     onConfirm={() => {
                         deleteSeason(season.id);
                         setShowDeleteConfirm(false)

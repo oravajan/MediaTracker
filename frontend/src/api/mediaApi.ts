@@ -15,4 +15,13 @@ export const mediaApi = {
         const response = await client.patch<MediaSummaryDto>(`/api/media/${id}/watch`)
         return response.data
     },
+
+    startUpdate: async (): Promise<void> => {
+        await client.post('/api/media/update')
+    },
+
+    getUpdateStatus: async (): Promise<boolean> => {
+        const response = await client.get<boolean>('/api/media/update/status')
+        return response.data
+    },
 }

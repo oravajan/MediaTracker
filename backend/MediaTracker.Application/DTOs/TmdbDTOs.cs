@@ -23,3 +23,5 @@ public record TmdbSeasonInfoDto(
 public record TmdbEpisodeInfoDto(
     int EpisodeNumber,
     string? Title);
+
+public record TmdbSeasonSummaryDto(int SeasonNumber, int EpisodeCount);

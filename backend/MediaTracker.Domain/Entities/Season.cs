@@ -38,6 +38,17 @@ public class Season
 
         _episodes.Add(episode);
     }
+    
+    public void MergeEpisodes(IEnumerable<Episode> incoming)
+    {
+        foreach (var episode in incoming)
+        {
+            if (_episodes.Any(e => e.EpisodeNumber == episode.EpisodeNumber))
+                continue;
+
+            AddEpisode(episode);
+        }
+    }
 
     private static void ValidateSeasonNumber(int seasonNumber)
     {

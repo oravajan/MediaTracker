@@ -5,6 +5,7 @@ namespace MediaTracker.Application.Interfaces;
 public interface IMediaRepository
 {
     Task<IEnumerable<Media>> GetAllAsync();
+    Task<List<Guid>> GetAllIdsAsync();
     Task<Media?> GetByIdAsync(Guid id);
     Task DeleteAsync(Guid id);
 

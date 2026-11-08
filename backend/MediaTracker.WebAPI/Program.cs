@@ -6,6 +6,7 @@ using MediaTracker.Domain.Exceptions;
 using MediaTracker.Infrastructure.Data;
 using MediaTracker.Infrastructure.ExternalServices.Tmdb;
 using MediaTracker.Infrastructure.Repositories;
+using MediaTracker.WebAPI.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,9 +23,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Services Dependency Injection Registration
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaService, MediaService>();
+builder.Services.AddScoped<IMediaUpdater, MediaUpdater>();
 builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<ITvShowService, TvShowService>();
 builder.Services.AddScoped<INextMovieLinker, NextMovieLinker>();
+builder.Services.AddScoped<ITvShowService, TvShowService>();
+builder.Services.AddSingleton<MediaUpdateRunner>();
 
 // Front-end CORS
 builder.Services.AddCors(options =>

@@ -64,29 +64,19 @@ public class TmdbService : ITmdbService
             return null;
 
         var response = await _httpClient.GetFromJsonAsync<TmdbTvShowDetail>(
-            $"tv/{tmdbId}?language=cs-CZ",
-            JsonOptions);
-
+            $"tv/{tmdbId}?language=cs-CZ", JsonOptions);
         if (response is null)
             return null;
 
-        var releasedSeasons = response.Seasons
-            .Where(s => s.SeasonNumber > 0 && IsReleased(s.AirDate))
+        var released = response.Seasons
+            .Where(s => s.SeasonNumber >= 0 && IsReleased(s.AirDate))
             .ToList();
 
-        var seasonDetails = await Task.WhenAll(
-            releasedSeasons.Select(s => GetSeasonEpisodesAsync(tmdbId, s.SeasonNumber)));
+        var seasons = await Task.WhenAll(released.Select(s => GetSeasonAsync(tmdbId, s.SeasonNumber)));
 
-        var seasons = releasedSeasons
-            .Select(s => new TmdbSeasonInfoDto(
-                s.SeasonNumber,
-                ParseYear(s.AirDate),
-                seasonDetails.First(d => d.SeasonNumber == s.SeasonNumber).Episodes))
-            .ToList();
-
-        return new TmdbTvShowSeasonsDto(response.Id, response.Name, seasons);
+        return new TmdbTvShowSeasonsDto(response.Id, response.Name, seasons.OfType<TmdbSeasonInfoDto>().ToList());
     }
-    
+
     public async Task<TmdbMovieSearchDto?> GetNextMovieAsync(int tmdbId)
     {
         if (!_isConfigured)
@@ -116,34 +106,47 @@ public class TmdbService : ITmdbService
         if (string.IsNullOrWhiteSpace(next.Part.Title))
             return null;
 
-        return new TmdbMovieSearchDto(next.Part.Id, next.Part.Title, next.Date.Value.Year);
+        return new TmdbMovieSearchDto(next.Part.Id, next.Part.Title, next.Date?.Year);
     }
 
-    
-
-    // Fetches episode names for a single season - returns empty list on failure so sync can fall back
-    private async Task<(int SeasonNumber, List<TmdbEpisodeInfoDto> Episodes)> GetSeasonEpisodesAsync(
-        int tmdbId, int seasonNumber)
+    public async Task<List<TmdbSeasonSummaryDto>?> GetReleasedSeasonsAsync(int tmdbId)
     {
-        var detail = await _httpClient.GetFromJsonAsync<TmdbSeasonDetail>(
-            $"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ",
-            JsonOptions);
+        if (!_isConfigured)
+            return null;
 
-        var episodes = detail?.Episodes
+        var response = await _httpClient.GetFromJsonAsync<TmdbTvShowDetail>($"tv/{tmdbId}", JsonOptions);
+
+        return response?.Seasons
+            .Where(s => s.SeasonNumber >= 0 && IsReleased(s.AirDate))
+            .Select(s => new TmdbSeasonSummaryDto(s.SeasonNumber, s.EpisodeCount))
+            .ToList();
+    }
+
+    public async Task<TmdbSeasonInfoDto?> GetSeasonAsync(int tmdbId, int seasonNumber)
+    {
+        if (!_isConfigured)
+            return null;
+
+        var detail = await _httpClient.GetFromJsonAsync<TmdbSeasonDetail>(
+            $"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ", JsonOptions);
+        if (detail is null)
+            return null;
+
+        var episodes = (detail.Episodes ?? [])
             .Where(e => IsReleased(e.AirDate))
             .Select(e => new TmdbEpisodeInfoDto(e.EpisodeNumber, e.Name))
-            .ToList() ?? new List<TmdbEpisodeInfoDto>();
+            .ToList();
 
-        return (seasonNumber, episodes);
+        return new TmdbSeasonInfoDto(seasonNumber, ParseYear(detail.AirDate), episodes);
     }
 
     // Parses "2008-01-20" -> 2008
     private static int? ParseYear(string? date)
         => int.TryParse(date?.Split('-').FirstOrDefault(), out var year) ? year : null;
-    
+
     private static DateOnly? ParseDate(string? date)
         => DateOnly.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d) ? d : null;
-    
+
     private static bool IsReleased(string? date)
         => DateOnly.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d)
            && d <= DateOnly.FromDateTime(DateTime.UtcNow);

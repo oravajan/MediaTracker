@@ -57,6 +57,18 @@ public class TvShow : Media
 
         _seasons.Add(season);
     }
+    
+    public void MergeSeasons(IEnumerable<Season> incoming)
+    {
+        foreach (var season in incoming)
+        {
+            var existing = _seasons.FirstOrDefault(s => s.SeasonNumber == season.SeasonNumber);
+            if (existing is null)
+                AddSeason(season);
+            else
+                existing.MergeEpisodes(season.Episodes);
+        }
+    }
 
     public void ReplaceSeasons(IEnumerable<Season> seasons)
     {
