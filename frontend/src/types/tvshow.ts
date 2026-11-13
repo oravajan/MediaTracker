@@ -38,6 +38,10 @@ export interface UpdateSeasonDto {
     releaseYear: number | null;
 }
 
+export interface MarkWatchedSeasonDto {
+    isWatched: boolean;
+}
+
 export interface TvShowDto {
     id: string;
     title: string;

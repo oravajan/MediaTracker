@@ -2,7 +2,7 @@ import client from './client'
 import type {
     TvShowDto, CreateTvShowDto, UpdateTvShowDto,
     SeasonDto, CreateSeasonDto, UpdateSeasonDto,
-    EpisodeDto, CreateEpisodeDto, UpdateEpisodeDto, MarkWatchedEpisodeDto
+    EpisodeDto, CreateEpisodeDto, UpdateEpisodeDto, MarkWatchedEpisodeDto, MarkWatchedSeasonDto
 } from '../types/tvshow'
 
 export const tvShowApi = {
@@ -37,6 +37,13 @@ export const tvShowApi = {
 
     deleteSeason: async (tvShowId: string, seasonId: string): Promise<void> => {
         await client.delete(`/api/tvshows/${tvShowId}/seasons/${seasonId}`)
+    },
+
+    markWatchedSeason: async (tvShowId: string, seasonId: string, dto: MarkWatchedSeasonDto): Promise<SeasonDto> => {
+        const response = await client.patch<SeasonDto>(
+            `/api/tvshows/${tvShowId}/seasons/${seasonId}/watched`, dto
+        )
+        return response.data
     },
 
     addEpisode: async (tvShowId: string, seasonId: string, dto: CreateEpisodeDto): Promise<EpisodeDto> => {

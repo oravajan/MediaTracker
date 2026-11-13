@@ -35,4 +35,11 @@ public class SeasonController : ControllerBase
         await _tvShowService.DeleteSeasonAsync(seasonId);
         return NoContent();
     }
+    
+    [HttpPatch("{seasonId:guid}/watched")]
+    public async Task<ActionResult<SeasonDto>> MarkWatched(Guid seasonId, MarkWatchedSeasonDto dto)
+    {
+        var season = await _tvShowService.MarkWatchedSeasonAsync(seasonId, dto);
+        return Ok(season);
+    }
 }

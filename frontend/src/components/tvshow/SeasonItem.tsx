@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {useUpdateSeason, useDeleteSeason} from '../../hooks/useTvShow'
+import {useUpdateSeason, useDeleteSeason, useMarkWatchedSeason} from '../../hooks/useTvShow'
 import ConfirmDialog from '../ui/ConfirmDialog'
 import EpisodeTable from './EpisodeTable'
 import type {SeasonDto} from '../../types/tvshow'
@@ -18,7 +18,10 @@ export default function SeasonItem({tvShowId, season}: Props) {
     const {mutate: updateSeason} = useUpdateSeason(tvShowId)
     const {mutate: deleteSeason} = useDeleteSeason(tvShowId)
 
+    const {mutate: markSeasonWatched} = useMarkWatchedSeason(tvShowId)
+
     const label = season.seasonNumber === 0 ? 'Specials' : `Season ${season.seasonNumber}`
+    const isAllWatched = season.episodes?.length > 0 && season.episodes.every(ep => ep.isWatched);
 
     const handleUpdate = () => {
         if (seasonNumber === '') return
@@ -69,6 +72,15 @@ export default function SeasonItem({tvShowId, season}: Props) {
                             {season.releaseYear && <span className="text-xs text-muted">{season.releaseYear}</span>}
                         </div>
                         <div className="flex gap-1">
+                            <button
+                                onClick={() => markSeasonWatched({
+                                    seasonId: season.id,
+                                    dto: {isWatched: !isAllWatched}
+                                })}
+                                className="text-xs text-accent px-2.5 py-1 rounded border border-transparent hover:border-accent hover:text-accent transition-colors font-medium"
+                            >
+                                {isAllWatched ? 'Unwatch all' : 'Watch all'}
+                            </button>
                             <button
                                 onClick={() => {
                                     setSeasonNumber(String(season.seasonNumber))

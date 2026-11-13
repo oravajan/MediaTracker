@@ -49,6 +49,14 @@ public class Season
             AddEpisode(episode);
         }
     }
+    
+    public void MarkWatched(bool isWatched)
+    {
+        foreach (var episode in _episodes)
+        {
+            episode.MarkWatched(isWatched);
+        }
+    }
 
     private static void ValidateSeasonNumber(int seasonNumber)
     {

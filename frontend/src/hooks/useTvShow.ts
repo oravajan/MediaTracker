@@ -6,7 +6,7 @@ import type {
     UpdateSeasonDto,
     CreateEpisodeDto,
     UpdateEpisodeDto,
-    MarkWatchedEpisodeDto
+    MarkWatchedEpisodeDto, MarkWatchedSeasonDto
 } from '../types/tvshow'
 
 export const useTvShow = (id: string) => {
@@ -78,6 +78,18 @@ export const useDeleteSeason = (tvShowId: string) => {
             queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
             queryClient.invalidateQueries({queryKey: ['media']})
         }
+    })
+}
+
+export const useMarkWatchedSeason = (tvShowId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: ({seasonId, dto}: { seasonId: string; dto: MarkWatchedSeasonDto }) =>
+            tvShowApi.markWatchedSeason(tvShowId, seasonId, dto),
+        onSuccess: () => {
+            void queryClient.invalidateQueries({queryKey: ['tvshows', tvShowId]})
+            void queryClient.invalidateQueries({queryKey: ['media']})
+        },
     })
 }
 

@@ -76,6 +76,17 @@ public class TvShowService : ITvShowService
         await _mediaRepository.DeleteSeasonAsync(seasonId);
         await _mediaRepository.SaveChangesAsync();
     }
+    
+    public async Task<SeasonDto> MarkWatchedSeasonAsync(Guid seasonId, MarkWatchedSeasonDto dto)
+    {
+        var season = await _mediaRepository.GetSeasonWithEpisodesAsync(seasonId);
+        if (season is null)
+            throw new NotFoundException($"Season with id {seasonId} was not found.");
+
+        season.MarkWatched(dto.IsWatched);
+        await _mediaRepository.SaveChangesAsync();
+        return season.ToDto();
+    }
 
     public async Task<EpisodeDto> AddEpisodeAsync(Guid seasonId, CreateEpisodeDto dto)
     {
