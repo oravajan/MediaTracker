@@ -24,7 +24,7 @@ public class TmdbController : ControllerBase
         [FromQuery] string query)
     {
         if (string.IsNullOrWhiteSpace(query))
-            return BadRequest("Query cannot be empty.");
+            return BadRequest(new { error = "Query cannot be empty." });
 
         var results = await _tmdbService.SearchMoviesAsync(query);
         return Ok(results);
@@ -35,7 +35,7 @@ public class TmdbController : ControllerBase
         [FromQuery] string query)
     {
         if (string.IsNullOrWhiteSpace(query))
-            return BadRequest("Query cannot be empty.");
+            return BadRequest(new { error = "Query cannot be empty." });
 
         var results = await _tmdbService.SearchTvShowsAsync(query);
         return Ok(results);
