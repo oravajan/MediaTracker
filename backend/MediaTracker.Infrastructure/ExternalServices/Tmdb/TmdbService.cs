@@ -69,7 +69,7 @@ public class TmdbService : ITmdbService
             return null;
 
         var released = response.Seasons
-            .Where(s => s.SeasonNumber > 0 && IsReleased(s.AirDate))
+            .Where(s => s.SeasonNumber >= 0 && IsReleased(s.AirDate))
             .ToList();
 
         var seasons = await Task.WhenAll(released.Select(s => GetSeasonWithEpisodesAsync(tmdbId, s.SeasonNumber)));

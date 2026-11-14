@@ -40,14 +40,4 @@ public class TmdbController : ControllerBase
         var results = await _tmdbService.SearchTvShowsAsync(query);
         return Ok(results);
     }
-
-    [HttpGet("tvshows/{tmdbId}/seasons")]
-    public async Task<ActionResult<TmdbTvShowSeasonsDto>> GetTvShowSeasons(int tmdbId)
-    {
-        var result = await _tmdbService.GetTvShowSeasonsWithEpisodesAsync(tmdbId);
-        if (result is null)
-            return NotFound();
-
-        return Ok(result);
-    }
 }
