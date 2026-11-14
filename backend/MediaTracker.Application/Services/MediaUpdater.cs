@@ -48,7 +48,7 @@ public class MediaUpdater : IMediaUpdater
             if (local is not null && local.Episodes.Count >= tmdbSeason.EpisodeCount)
                 continue;
 
-            var season = await _tmdbService.GetSeasonAsync(tvShow.TmdbId.Value, tmdbSeason.SeasonNumber);
+            var season = await _tmdbService.GetSeasonWithEpisodesAsync(tvShow.TmdbId.Value, tmdbSeason.SeasonNumber);
             if (season is null)
                 continue;
 

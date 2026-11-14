@@ -58,7 +58,7 @@ public class TmdbService : ITmdbService
                ?? Enumerable.Empty<TmdbTvShowSearchDto>();
     }
 
-    public async Task<TmdbTvShowSeasonsDto?> GetTvShowSeasonsAsync(int tmdbId)
+    public async Task<TmdbTvShowSeasonsDto?> GetTvShowSeasonsWithEpisodesAsync(int tmdbId)
     {
         if (!_isConfigured)
             return null;
@@ -72,7 +72,7 @@ public class TmdbService : ITmdbService
             .Where(s => s.SeasonNumber > 0 && IsReleased(s.AirDate))
             .ToList();
 
-        var seasons = await Task.WhenAll(released.Select(s => GetSeasonAsync(tmdbId, s.SeasonNumber)));
+        var seasons = await Task.WhenAll(released.Select(s => GetSeasonWithEpisodesAsync(tmdbId, s.SeasonNumber)));
 
         return new TmdbTvShowSeasonsDto(response.Id, response.Name, seasons.OfType<TmdbSeasonInfoDto>().ToList());
     }
@@ -122,7 +122,7 @@ public class TmdbService : ITmdbService
             .ToList();
     }
 
-    public async Task<TmdbSeasonInfoDto?> GetSeasonAsync(int tmdbId, int seasonNumber)
+    public async Task<TmdbSeasonInfoDto?> GetSeasonWithEpisodesAsync(int tmdbId, int seasonNumber)
     {
         if (!_isConfigured)
             return null;

@@ -137,7 +137,7 @@ public class TvShowService : ITvShowService
         if (!tvShow.TmdbId.HasValue)
             throw new InvalidOperationException("TV Show is not linked to TMDB.");
 
-        var tmdbData = await _tmdbService.GetTvShowSeasonsAsync(tvShow.TmdbId.Value);
+        var tmdbData = await _tmdbService.GetTvShowSeasonsWithEpisodesAsync(tvShow.TmdbId.Value);
         if (tmdbData is null)
             throw new NotFoundException($"TV Show with TMDB id {tvShow.TmdbId} was not found.");
 

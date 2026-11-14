@@ -7,8 +7,8 @@ public interface ITmdbService
     bool IsConfigured { get; }
     Task<IEnumerable<TmdbMovieSearchDto>> SearchMoviesAsync(string query);
     Task<IEnumerable<TmdbTvShowSearchDto>> SearchTvShowsAsync(string query);
-    Task<TmdbTvShowSeasonsDto?> GetTvShowSeasonsAsync(int tmdbId);
+    Task<TmdbTvShowSeasonsDto?> GetTvShowSeasonsWithEpisodesAsync(int tmdbId);
     Task<TmdbMovieSearchDto?> GetNextMovieAsync(int tmdbId);
     Task<List<TmdbSeasonSummaryDto>?> GetReleasedSeasonsAsync(int tmdbId);
-    Task<TmdbSeasonInfoDto?> GetSeasonAsync(int tmdbId, int seasonNumber);
+    Task<TmdbSeasonInfoDto?> GetSeasonWithEpisodesAsync(int tmdbId, int seasonNumber);
 }
