@@ -57,7 +57,6 @@ public class NextMovieLinker : INextMovieLinker
         {
             sequel = new Movie(next.Title, null, null, false, next.TmdbId, next.ReleaseYear);
             await _mediaRepository.AddMovieAsync(sequel);
-            await _mediaRepository.SaveChangesAsync();
         }
         else if (await WouldCreateCycleAsync(movie.Id, sequel.Id))
         {
