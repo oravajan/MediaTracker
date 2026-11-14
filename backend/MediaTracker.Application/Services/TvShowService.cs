@@ -60,13 +60,17 @@ public class TvShowService : ITvShowService
         return season.ToDto();
     }
 
-    public async Task<SeasonDto> UpdateSeasonAsync(Guid seasonId, UpdateSeasonDto dto)
+    public async Task<SeasonDto> UpdateSeasonAsync(Guid tvShowId, Guid seasonId, UpdateSeasonDto dto)
     {
-        var season = await _mediaRepository.GetSeasonByIdAsync(seasonId);
+        var tvShow = await _mediaRepository.GetTvShowWithSeasonsAsync(tvShowId);
+        if (tvShow is null)
+            throw new NotFoundException($"TV Show with id {tvShowId} was not found.");
+
+        var season = tvShow.Seasons.FirstOrDefault(s => s.Id == seasonId);
         if (season is null)
             throw new NotFoundException($"Season with id {seasonId} was not found.");
 
-        season.Update(dto.SeasonNumber, dto.ReleaseYear);
+        tvShow.UpdateSeason(season, dto.SeasonNumber, dto.ReleaseYear);
         await _mediaRepository.SaveChangesAsync();
         return season.ToDto();
     }
@@ -100,13 +104,17 @@ public class TvShowService : ITvShowService
         return episode.ToDto();
     }
 
-    public async Task<EpisodeDto> UpdateEpisodeAsync(Guid episodeId, UpdateEpisodeDto dto)
+    public async Task<EpisodeDto> UpdateEpisodeAsync(Guid seasonId, Guid episodeId, UpdateEpisodeDto dto)
     {
-        var episode = await _mediaRepository.GetEpisodeByIdAsync(episodeId);
+        var season = await _mediaRepository.GetSeasonWithEpisodesAsync(seasonId);
+        if (season is null)
+            throw new NotFoundException($"Season with id {seasonId} was not found.");
+
+        var episode = season.Episodes.FirstOrDefault(e => e.Id == episodeId);
         if (episode is null)
             throw new NotFoundException($"Episode with id {episodeId} was not found.");
 
-        episode.Update(dto.EpisodeNumber, dto.Title, dto.IsWatched);
+        season.UpdateEpisode(episode, dto.EpisodeNumber, dto.Title, dto.IsWatched);
         await _mediaRepository.SaveChangesAsync();
         return episode.ToDto();
     }

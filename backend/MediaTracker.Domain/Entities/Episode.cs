@@ -21,7 +21,7 @@ public class Episode
 
     public Episode() { }
 
-    public void Update(int episodeNumber, string? title, bool isWatched)
+    internal void Update(int episodeNumber, string? title, bool isWatched)
     {
         ValidateEpisodeNumber(episodeNumber);
         EpisodeNumber = episodeNumber;

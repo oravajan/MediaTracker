@@ -31,24 +31,30 @@ public class SeasonTests
     }
 
     [Fact]
-    public void Update_WithValidSeasonNumber_UpdatesSeasonNumber()
+    public void UpdateEpisode_WithValidData_UpdatesProperties()
     {
-        var season = CreateSeason(1);
+        var season = CreateSeason();
+        var episode = CreateEpisode(1);
+        season.AddEpisode(episode);
 
-        season.Update(2, 2000);
+        season.UpdateEpisode(episode, 2, "Updated Title", true);
 
-        season.SeasonNumber.Should().Be(2);
+        episode.EpisodeNumber.Should().Be(2);
+        episode.Title.Should().Be("Updated Title");
+        episode.IsWatched.Should().BeTrue();
     }
 
     [Fact]
-    public void Update_WithInvalidSeasonNumber_ThrowsDomainException()
+    public void UpdateEpisode_WithInvalidEpisodeNumber_ThrowsDomainException()
     {
-        var season = CreateSeason(1);
+        var season = CreateSeason();
+        var episode = CreateEpisode(1);
+        season.AddEpisode(episode);
 
-        var act = () => season.Update(-1, 2000);
+        var act = () => season.UpdateEpisode(episode, 0, "Title", false);
 
         act.Should().Throw<DomainException>()
-            .WithMessage("*greater than or equal to 0*");
+            .WithMessage("*greater than or equal to 1*");
     }
 
     [Fact]

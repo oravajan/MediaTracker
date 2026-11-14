@@ -40,29 +40,6 @@ public class EpisodeTests
     }
 
     [Fact]
-    public void Update_WithValidData_UpdatesProperties()
-    {
-        var episode = CreateEpisode(1, "Pilot");
-
-        episode.Update(2, "Updated Title", true);
-
-        episode.EpisodeNumber.Should().Be(2);
-        episode.Title.Should().Be("Updated Title");
-        episode.IsWatched.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Update_WithInvalidEpisodeNumber_ThrowsDomainException()
-    {
-        var episode = CreateEpisode();
-
-        var act = () => episode.Update(0, "Title", false);
-
-        act.Should().Throw<DomainException>()
-            .WithMessage("*greater than or equal to 1*");
-    }
-
-    [Fact]
     public void MarkWatched_SetsIsWatchedCorrectly()
     {
         var episode = CreateEpisode(isWatched: false);

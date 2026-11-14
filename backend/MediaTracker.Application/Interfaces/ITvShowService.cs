@@ -9,12 +9,12 @@ public interface ITvShowService
     Task<TvShowDto> UpdateAsync(Guid id, UpdateTvShowDto dto);
 
     Task<SeasonDto> AddSeasonAsync(Guid tvShowId, CreateSeasonDto dto);
-    Task<SeasonDto> UpdateSeasonAsync(Guid seasonId, UpdateSeasonDto dto);
+    Task<SeasonDto> UpdateSeasonAsync(Guid tvShowId, Guid seasonId, UpdateSeasonDto dto);
     Task DeleteSeasonAsync(Guid seasonId);
     Task<SeasonDto> MarkWatchedSeasonAsync(Guid seasonId, MarkWatchedSeasonDto dto);
 
     Task<EpisodeDto> AddEpisodeAsync(Guid seasonId, CreateEpisodeDto dto);
-    Task<EpisodeDto> UpdateEpisodeAsync(Guid episodeId, UpdateEpisodeDto dto);
+    Task<EpisodeDto> UpdateEpisodeAsync(Guid seasonId, Guid episodeId, UpdateEpisodeDto dto);
     Task DeleteEpisodeAsync(Guid episodeId);
     Task<EpisodeDto> MarkWatchedEpisodeAsync(Guid episodeId, MarkWatchedEpisodeDto dto);
     

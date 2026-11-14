@@ -39,6 +39,31 @@ public class TvShowTests
     }
 
     [Fact]
+    public void UpdateSeason_WithValidSeasonNumber_UpdatesSeasonNumber()
+    {
+        var tvShow = CreateTvShow();
+        var season = CreateSeason(1);
+        tvShow.AddSeason(season);
+
+        tvShow.UpdateSeason(season, 2, 2000);
+
+        season.SeasonNumber.Should().Be(2);
+    }
+
+    [Fact]
+    public void UpdateSeason_WithInvalidSeasonNumber_ThrowsDomainException()
+    {
+        var tvShow = CreateTvShow();
+        var season = CreateSeason(1);
+        tvShow.AddSeason(season);
+
+        var act = () => tvShow.UpdateSeason(season, -1, 2000);
+
+        act.Should().Throw<DomainException>()
+            .WithMessage("*greater than or equal to 0*");
+    }
+
+    [Fact]
     public void IsWatched_WithNoEpisodes_ReturnsFalse()
     {
         var tvShow = CreateTvShow();

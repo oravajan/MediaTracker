@@ -58,7 +58,15 @@ public class TvShow : Media
 
         _seasons.Add(season);
     }
-    
+
+    public void UpdateSeason(Season season, int seasonNumber, int? releaseYear)
+    {
+        if (_seasons.Any(s => s != season && s.SeasonNumber == seasonNumber))
+            throw new DomainException($"Season {seasonNumber} already exists.");
+
+        season.Update(seasonNumber, releaseYear);
+    }
+
     public void MergeSeasons(IEnumerable<Season> incoming)
     {
         foreach (var season in incoming)

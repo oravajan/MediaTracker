@@ -21,7 +21,7 @@ public class Season
 
     private Season() { }
 
-    public void Update(int seasonNumber, int? releaseYear)
+    internal void Update(int seasonNumber, int? releaseYear)
     {
         ValidateSeasonNumber(seasonNumber);
         SeasonNumber = seasonNumber;
@@ -38,7 +38,15 @@ public class Season
 
         _episodes.Add(episode);
     }
-    
+
+    public void UpdateEpisode(Episode episode, int episodeNumber, string? title, bool isWatched)
+    {
+        if (_episodes.Any(e => e != episode && e.EpisodeNumber == episodeNumber))
+            throw new DomainException($"Episode {episodeNumber} already exists in this season.");
+
+        episode.Update(episodeNumber, title, isWatched);
+    }
+
     public void MergeEpisodes(IEnumerable<Episode> incoming)
     {
         foreach (var episode in incoming)

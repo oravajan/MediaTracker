@@ -23,9 +23,9 @@ public class EpisodeController : ControllerBase
     }
 
     [HttpPut("{episodeId:guid}")]
-    public async Task<ActionResult<EpisodeDto>> Update(Guid episodeId, UpdateEpisodeDto dto)
+    public async Task<ActionResult<EpisodeDto>> Update(Guid seasonId, Guid episodeId, UpdateEpisodeDto dto)
     {
-        var episode = await _tvShowService.UpdateEpisodeAsync(episodeId, dto);
+        var episode = await _tvShowService.UpdateEpisodeAsync(seasonId, episodeId, dto);
         return Ok(episode);
     }
 

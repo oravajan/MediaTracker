@@ -23,9 +23,9 @@ public class SeasonController : ControllerBase
     }
 
     [HttpPut("{seasonId:guid}")]
-    public async Task<ActionResult<SeasonDto>> Update(Guid seasonId, UpdateSeasonDto dto)
+    public async Task<ActionResult<SeasonDto>> Update(Guid tvShowId, Guid seasonId, UpdateSeasonDto dto)
     {
-        var season = await _tvShowService.UpdateSeasonAsync(seasonId, dto);
+        var season = await _tvShowService.UpdateSeasonAsync(tvShowId, seasonId, dto);
         return Ok(season);
     }
 
