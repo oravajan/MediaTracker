@@ -8,6 +8,7 @@ public class Episode
     public int EpisodeNumber { get; private set; }
     public string? Title { get; private set; }
     public bool IsWatched { get; private set; }
+    public DateTime? WatchedAt { get; private set; }
 
     public Episode(int episodeNumber, string? title, bool isWatched)
     {
@@ -15,7 +16,7 @@ public class Episode
         Id = Guid.Empty;
         EpisodeNumber = episodeNumber;
         Title = title;
-        IsWatched = isWatched;
+        MarkWatched(isWatched);
     }
 
     public Episode() { }
@@ -25,12 +26,16 @@ public class Episode
         ValidateEpisodeNumber(episodeNumber);
         EpisodeNumber = episodeNumber;
         Title = title;
-        IsWatched = isWatched;
+        MarkWatched(isWatched);
     }
 
     public void MarkWatched(bool isWatched)
     {
+        if (isWatched == IsWatched)
+            return;
+
         IsWatched = isWatched;
+        WatchedAt = isWatched ? DateTime.UtcNow : null;
     }
 
     private static void ValidateEpisodeNumber(int episodeNumber)

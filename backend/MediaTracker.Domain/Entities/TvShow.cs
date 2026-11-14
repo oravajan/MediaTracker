@@ -10,6 +10,7 @@ public class TvShow : Media
     public int TotalEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count();
     public int WatchedEpisodeCount => Seasons.SelectMany(s => s.Episodes).Count(e => e.IsWatched);
     public bool IsWatched => TotalEpisodeCount > 0 && WatchedEpisodeCount == TotalEpisodeCount;
+    public DateTime? LastWatchedAt => Seasons.SelectMany(s => s.Episodes).Max(e => e.WatchedAt);
     public int? ReleaseYear => Seasons
         .Where(s => s.SeasonNumber > 0)
         .Min(s => s.ReleaseYear);

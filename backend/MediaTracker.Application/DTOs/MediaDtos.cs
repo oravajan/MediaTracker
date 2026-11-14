@@ -8,4 +8,5 @@ public record MediaSummaryDto(
     bool IsWatched,
     int? WatchedEpisodeCount,
     int? TotalEpisodeCount,
-    int? ReleaseYear);
+    DateTime? LastWatchedAt,
+    DateTime CreatedAt);

@@ -8,6 +8,7 @@ public abstract class Media
     public string Title { get; private set; } = string.Empty;
     public int? UserRating { get; private set; }
     public int? TmdbId { get; private set; }
+    public DateTime CreatedAt { get; private set; }
 
     public Media(string title, int? userRating, int? tmdbId)
     {
@@ -18,6 +19,7 @@ public abstract class Media
         Title = title;
         UserRating = userRating;
         TmdbId = tmdbId;
+        CreatedAt = DateTime.UtcNow;
     }
 
     protected Media() { }

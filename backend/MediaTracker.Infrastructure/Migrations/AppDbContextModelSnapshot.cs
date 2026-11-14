@@ -41,6 +41,9 @@ namespace MediaTracker.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<DateTime?>("WatchedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SeasonId");
@@ -53,6 +56,11 @@ namespace MediaTracker.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("MediaType")
                         .IsRequired()
@@ -113,6 +121,9 @@ namespace MediaTracker.Infrastructure.Migrations
 
                     b.Property<int?>("ReleaseYear")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("WatchedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasIndex("NextMovieId");
 

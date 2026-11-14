@@ -21,6 +21,10 @@ internal class MediaConfiguration : IEntityTypeConfiguration<Media>
         builder.Property(m => m.UserRating)
             .IsRequired(false);
 
+        builder.Property(m => m.CreatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
         builder.HasDiscriminator<string>("MediaType")
             .HasValue<Movie>("Movie")
             .HasValue<TvShow>("TvShow");

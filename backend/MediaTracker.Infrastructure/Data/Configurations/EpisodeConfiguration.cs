@@ -23,5 +23,8 @@ internal class EpisodeConfiguration : IEntityTypeConfiguration<Episode>
 
         builder.Property(e => e.IsWatched)
             .IsRequired();
+
+        builder.Property(e => e.WatchedAt)
+            .IsRequired(false);
     }
 }

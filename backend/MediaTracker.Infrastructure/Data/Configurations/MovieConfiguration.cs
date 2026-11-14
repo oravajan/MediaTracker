@@ -16,5 +16,8 @@ internal class MovieConfiguration : IEntityTypeConfiguration<Movie>
         
         builder.Property(m => m.IsWatched)
             .IsRequired();
+
+        builder.Property(m => m.WatchedAt)
+            .IsRequired(false);
     }
 }
