@@ -19,7 +19,7 @@ internal class EpisodeConfiguration : IEntityTypeConfiguration<Episode>
 
         builder.Property(e => e.Title)
             .IsRequired(false)
-            .HasMaxLength(255);
+            .HasMaxLength(Episode.TitleMaxLength);
 
         builder.Property(e => e.IsWatched)
             .IsRequired();

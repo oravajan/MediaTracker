@@ -16,7 +16,7 @@ internal class MediaConfiguration : IEntityTypeConfiguration<Media>
 
         builder.Property(m => m.Title)
             .IsRequired()
-            .HasMaxLength(255);
+            .HasMaxLength(Media.TitleMaxLength);
 
         builder.Property(m => m.UserRating)
             .IsRequired(false);

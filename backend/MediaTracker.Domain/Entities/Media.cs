@@ -4,6 +4,8 @@ namespace MediaTracker.Domain.Entities;
 
 public abstract class Media
 {
+    public const int TitleMaxLength = 255;
+
     public Guid Id { get; private set; }
     public string Title { get; private set; } = string.Empty;
     public int? UserRating { get; private set; }
@@ -40,6 +42,9 @@ public abstract class Media
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("Title cannot be empty.");
+
+        if (title.Length > TitleMaxLength)
+            throw new DomainException($"Title cannot be longer than {TitleMaxLength} characters.");
     }
 
     private static void ValidateUserRating(int? userRating)
