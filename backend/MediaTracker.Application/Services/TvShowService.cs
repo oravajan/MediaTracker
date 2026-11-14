@@ -3,6 +3,7 @@ using MediaTracker.Application.Exceptions;
 using MediaTracker.Application.Interfaces;
 using MediaTracker.Application.Mappers;
 using MediaTracker.Domain.Entities;
+using MediaTracker.Domain.Exceptions;
 
 namespace MediaTracker.Application.Services;
 
@@ -146,7 +147,7 @@ public class TvShowService : ITvShowService
             throw new NotFoundException($"TV Show with id {tvShowId} was not found.");
 
         if (!tvShow.TmdbId.HasValue)
-            throw new InvalidOperationException("TV Show is not linked to TMDB.");
+            throw new DomainException("TV Show is not linked to TMDB.");
 
         var tmdbData = await _tmdbService.GetTvShowSeasonsWithEpisodesAsync(tvShow.TmdbId.Value);
         if (tmdbData is null)
