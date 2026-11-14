@@ -41,7 +41,7 @@ public class TvShowService : ITvShowService
 
     public async Task<TvShowDto> UpdateAsync(Guid id, UpdateTvShowDto dto)
     {
-        var tvShow = await _mediaRepository.GetTvShowByIdAsync(id);
+        var tvShow = await _mediaRepository.GetTvShowWithSeasonsAndEpisodesAsync(id);
         if (tvShow is null)
             throw new NotFoundException($"TV Show with id {id} was not found.");
         tvShow.Update(dto.Title, dto.UserRating, dto.TmdbId);

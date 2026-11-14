@@ -13,7 +13,6 @@ public interface IMediaRepository
     Task<Movie?> GetMovieByTmdbIdAsync(int tmdbId);
     Task AddMovieAsync(Movie movie);
 
-    Task<TvShow?> GetTvShowByIdAsync(Guid id);
     Task<TvShow?> GetTvShowWithSeasonsAsync(Guid id);
     Task<TvShow?> GetTvShowWithSeasonsAndEpisodesAsync(Guid id);
     Task AddTvShowAsync(TvShow tvShow);

@@ -65,13 +65,6 @@ public class MediaRepository : IMediaRepository
         await _context.Media.AddAsync(movie);
     }
 
-    public async Task<TvShow?> GetTvShowByIdAsync(Guid id)
-    {
-        return await _context.Media
-            .OfType<TvShow>()
-            .FirstOrDefaultAsync(t => t.Id == id);
-    }
-
     public async Task<TvShow?> GetTvShowWithSeasonsAsync(Guid id)
     {
         return await _context.Media
