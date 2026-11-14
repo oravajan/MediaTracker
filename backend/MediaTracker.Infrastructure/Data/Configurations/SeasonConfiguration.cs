@@ -22,5 +22,8 @@ internal class SeasonConfiguration : IEntityTypeConfiguration<Season>
             .HasForeignKey("SeasonId")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex("TvShowId", nameof(Season.SeasonNumber))
+            .IsUnique();
     }
 }

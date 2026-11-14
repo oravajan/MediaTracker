@@ -26,5 +26,8 @@ internal class EpisodeConfiguration : IEntityTypeConfiguration<Episode>
 
         builder.Property(e => e.WatchedAt)
             .IsRequired(false);
+
+        builder.HasIndex("SeasonId", nameof(Episode.EpisodeNumber))
+            .IsUnique();
     }
 }

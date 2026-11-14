@@ -46,7 +46,8 @@ namespace MediaTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SeasonId");
+                    b.HasIndex("SeasonId", "EpisodeNumber")
+                        .IsUnique();
 
                     b.ToTable("Episode", (string)null);
                 });
@@ -104,7 +105,8 @@ namespace MediaTracker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TvShowId");
+                    b.HasIndex("TvShowId", "SeasonNumber")
+                        .IsUnique();
 
                     b.ToTable("Season", (string)null);
                 });
