@@ -16,11 +16,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Services Dependency Injection Registration
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IMediaUpdater, MediaUpdater>();
@@ -29,7 +27,6 @@ builder.Services.AddScoped<INextMovieLinker, NextMovieLinker>();
 builder.Services.AddScoped<ITvShowService, TvShowService>();
 builder.Services.AddSingleton<MediaUpdateRunner>();
 
-// Front-end CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -48,18 +45,6 @@ builder.Services.AddHttpClient<ITmdbService, TmdbService>(client =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseCors("Frontend");
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-
-// Exceptions
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -77,5 +62,15 @@ app.UseExceptionHandler(errorApp =>
         await context.Response.WriteAsJsonAsync(new { error = message });
     });
 });
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseCors("Frontend");
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
