@@ -30,16 +30,16 @@ public class SeasonController : ControllerBase
     }
 
     [HttpDelete("{seasonId:guid}")]
-    public async Task<ActionResult> Delete(Guid seasonId)
+    public async Task<ActionResult> Delete(Guid tvShowId, Guid seasonId)
     {
-        await _tvShowService.DeleteSeasonAsync(seasonId);
+        await _tvShowService.DeleteSeasonAsync(tvShowId, seasonId);
         return NoContent();
     }
     
     [HttpPatch("{seasonId:guid}/watched")]
-    public async Task<ActionResult<SeasonDto>> MarkWatched(Guid seasonId, MarkWatchedSeasonDto dto)
+    public async Task<ActionResult<SeasonDto>> MarkWatched(Guid tvShowId, Guid seasonId, MarkWatchedSeasonDto dto)
     {
-        var season = await _tvShowService.MarkWatchedSeasonAsync(seasonId, dto);
+        var season = await _tvShowService.MarkWatchedSeasonAsync(tvShowId, seasonId, dto);
         return Ok(season);
     }
 }

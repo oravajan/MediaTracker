@@ -16,30 +16,32 @@ public class EpisodeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<EpisodeDto>> Add(Guid seasonId, CreateEpisodeDto dto)
+    public async Task<ActionResult<EpisodeDto>> Add(Guid tvShowId, Guid seasonId, CreateEpisodeDto dto)
     {
-        var episode = await _tvShowService.AddEpisodeAsync(seasonId, dto);
+        var episode = await _tvShowService.AddEpisodeAsync(tvShowId, seasonId, dto);
         return Created(string.Empty, episode);
     }
 
     [HttpPut("{episodeId:guid}")]
-    public async Task<ActionResult<EpisodeDto>> Update(Guid seasonId, Guid episodeId, UpdateEpisodeDto dto)
+    public async Task<ActionResult<EpisodeDto>> Update(Guid tvShowId, Guid seasonId, Guid episodeId,
+        UpdateEpisodeDto dto)
     {
-        var episode = await _tvShowService.UpdateEpisodeAsync(seasonId, episodeId, dto);
+        var episode = await _tvShowService.UpdateEpisodeAsync(tvShowId, seasonId, episodeId, dto);
         return Ok(episode);
     }
 
     [HttpDelete("{episodeId:guid}")]
-    public async Task<ActionResult> Delete(Guid episodeId)
+    public async Task<ActionResult> Delete(Guid tvShowId, Guid seasonId, Guid episodeId)
     {
-        await _tvShowService.DeleteEpisodeAsync(episodeId);
+        await _tvShowService.DeleteEpisodeAsync(tvShowId, seasonId, episodeId);
         return NoContent();
     }
 
     [HttpPatch("{episodeId:guid}/watched")]
-    public async Task<ActionResult<EpisodeDto>> MarkWatched(Guid episodeId, MarkWatchedEpisodeDto dto)
+    public async Task<ActionResult<EpisodeDto>> MarkWatched(Guid tvShowId, Guid seasonId, Guid episodeId,
+        MarkWatchedEpisodeDto dto)
     {
-        var episode = await _tvShowService.MarkWatchedEpisodeAsync(episodeId, dto);
+        var episode = await _tvShowService.MarkWatchedEpisodeAsync(tvShowId, seasonId, episodeId, dto);
         return Ok(episode);
     }
 }

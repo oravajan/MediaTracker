@@ -67,6 +67,11 @@ public class TvShow : Media
         season.Update(seasonNumber, releaseYear);
     }
 
+    public void RemoveSeason(Season season)
+    {
+        _seasons.Remove(season);
+    }
+
     public void MergeSeasons(IEnumerable<Season> incoming)
     {
         foreach (var season in incoming)

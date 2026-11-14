@@ -47,6 +47,11 @@ public class Season
         episode.Update(episodeNumber, title, isWatched);
     }
 
+    public void RemoveEpisode(Episode episode)
+    {
+        _episodes.Remove(episode);
+    }
+
     public void MergeEpisodes(IEnumerable<Episode> incoming)
     {
         foreach (var episode in incoming)

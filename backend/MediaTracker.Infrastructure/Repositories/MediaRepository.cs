@@ -95,36 +95,15 @@ public class MediaRepository : IMediaRepository
         await _context.Media.AddAsync(tvShow);
     }
 
-    public async Task<Season?> GetSeasonByIdAsync(Guid seasonId)
+    public async Task<Season?> GetSeasonWithEpisodesAsync(Guid tvShowId, Guid seasonId)
     {
-        return await _context.Season.FirstOrDefaultAsync(s => s.Id == seasonId);
-    }
-
-    public async Task<Season?> GetSeasonWithEpisodesAsync(Guid seasonId)
-    {
-        return await _context.Season
+        return await _context.Media
+            .OfType<TvShow>()
+            .Where(t => t.Id == tvShowId)
+            .SelectMany(t => t.Seasons)
             .Include(s => s.Episodes)
             .AsSplitQuery()
             .FirstOrDefaultAsync(s => s.Id == seasonId);
-    }
-
-    public async Task DeleteSeasonAsync(Guid seasonId)
-    {
-        var season = await GetSeasonByIdAsync(seasonId);
-        if (season != null)
-            _context.Season.Remove(season);
-    }
-
-    public async Task<Episode?> GetEpisodeByIdAsync(Guid episodeId)
-    {
-        return await _context.Episode.FirstOrDefaultAsync(e => e.Id == episodeId);
-    }
-
-    public async Task DeleteEpisodeAsync(Guid episodeId)
-    {
-        var episode = await GetEpisodeByIdAsync(episodeId);
-        if (episode != null)
-            _context.Episode.Remove(episode);
     }
 
     public async Task SaveChangesAsync()
