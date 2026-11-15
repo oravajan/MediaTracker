@@ -32,8 +32,14 @@ jobs:
         run: dotnet test --no-build --verbosity normal
         working-directory: backend
 
+      - name: Check vulnerable packages
+        run: |
+          dotnet list package --vulnerable --include-transitive | tee vulnerable.txt
+          ! grep -q "has the following vulnerable packages" vulnerable.txt
+        working-directory: backend
+
   test-frontend:
-    name: Frontend Tests
+    name: Frontend Lint and Build
     runs-on: ubuntu-latest
 
     steps:
@@ -50,6 +56,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: frontend
+
+      - name: Lint
+        run: pnpm lint
         working-directory: frontend
 
       - name: Build

@@ -16,7 +16,7 @@ RUN dotnet publish MediaTracker.WebAPI/MediaTracker.WebAPI.csproj \
     -o /app/publish
 
 # Generate migration bundle - standalone executable, no SDK needed at runtime
-RUN dotnet tool install --global dotnet-ef
+RUN dotnet tool install --global dotnet-ef --version 10.0.15
 ENV PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet ef migrations bundle \
     --project MediaTracker.Infrastructure \
