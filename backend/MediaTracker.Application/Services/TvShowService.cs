@@ -33,7 +33,7 @@ public class TvShowService : ITvShowService
         await _mediaRepository.AddTvShowAsync(tvShow);
         await _mediaRepository.SaveChangesAsync();
 
-        if (tvShow.TmdbId.HasValue)
+        if (tvShow.TmdbId.HasValue && _tmdbService.IsConfigured)
             await SyncWithTmdbAsync(tvShow.Id);
 
         return tvShow.ToDto();
@@ -148,6 +148,9 @@ public class TvShowService : ITvShowService
 
         if (!tvShow.TmdbId.HasValue)
             throw new DomainException("TV Show is not linked to TMDB.");
+
+        if (!_tmdbService.IsConfigured)
+            throw new DomainException("TMDB is not configured.");
 
         var tmdbData = await _tmdbService.GetTvShowSeasonsWithEpisodesAsync(tvShow.TmdbId.Value);
         if (tmdbData is null)
