@@ -37,6 +37,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpClient<ITmdbService, TmdbService>(client =>
 {
     client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+    client.Timeout = TimeSpan.FromSeconds(10);
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
         "Bearer",
         builder.Configuration["Tmdb:AccessToken"]);
