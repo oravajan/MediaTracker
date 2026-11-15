@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using MediaTracker.Application.DTOs;
 using MediaTracker.Application.Interfaces;
@@ -63,8 +64,7 @@ public class TmdbService : ITmdbService
         if (!_isConfigured)
             return null;
 
-        var response = await _httpClient.GetFromJsonAsync<TmdbTvShowDetail>(
-            $"tv/{tmdbId}?language=cs-CZ", JsonOptions);
+        var response = await GetOrDefaultAsync<TmdbTvShowDetail>($"tv/{tmdbId}?language=cs-CZ");
         if (response is null)
             return null;
 
@@ -82,13 +82,12 @@ public class TmdbService : ITmdbService
         if (!_isConfigured)
             return null;
 
-        var movie = await _httpClient.GetFromJsonAsync<TmdbMovieDetail>($"movie/{tmdbId}", JsonOptions);
+        var movie = await GetOrDefaultAsync<TmdbMovieDetail>($"movie/{tmdbId}");
         var collectionId = movie?.BelongsToCollection?.Id;
         if (collectionId is null)
             return null;
 
-        var collection = await _httpClient.GetFromJsonAsync<TmdbCollectionDetail>(
-            $"collection/{collectionId}?language=cs-CZ", JsonOptions);
+        var collection = await GetOrDefaultAsync<TmdbCollectionDetail>($"collection/{collectionId}?language=cs-CZ");
         if (collection is null)
             return null;
 
@@ -114,7 +113,7 @@ public class TmdbService : ITmdbService
         if (!_isConfigured)
             return null;
 
-        var response = await _httpClient.GetFromJsonAsync<TmdbTvShowDetail>($"tv/{tmdbId}", JsonOptions);
+        var response = await GetOrDefaultAsync<TmdbTvShowDetail>($"tv/{tmdbId}");
 
         return response?.Seasons
             .Where(s => s.SeasonNumber > 0 && IsReleased(s.AirDate))
@@ -127,8 +126,7 @@ public class TmdbService : ITmdbService
         if (!_isConfigured)
             return null;
 
-        var detail = await _httpClient.GetFromJsonAsync<TmdbSeasonDetail>(
-            $"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ", JsonOptions);
+        var detail = await GetOrDefaultAsync<TmdbSeasonDetail>($"tv/{tmdbId}/season/{seasonNumber}?language=cs-CZ");
         if (detail is null)
             return null;
 
@@ -138,6 +136,16 @@ public class TmdbService : ITmdbService
             .ToList();
 
         return new TmdbSeasonInfoDto(seasonNumber, ParseYear(detail.AirDate), episodes);
+    }
+
+    private async Task<T?> GetOrDefaultAsync<T>(string url)
+    {
+        using var response = await _httpClient.GetAsync(url);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return default;
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<T>(JsonOptions);
     }
 
     // Parses "2008-01-20" -> 2008
