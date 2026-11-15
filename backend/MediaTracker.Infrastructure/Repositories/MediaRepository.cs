@@ -37,11 +37,14 @@ public class MediaRepository : IMediaRepository
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<Media?> FindAsync(Guid id)
     {
-        var media = await _context.Media.FindAsync(id);
-        if (media != null)
-            _context.Media.Remove(media);
+        return await _context.Media.FindAsync(id);
+    }
+
+    public void Remove(Media media)
+    {
+        _context.Media.Remove(media);
     }
 
     public async Task<Movie?> GetMovieByIdAsync(Guid id)

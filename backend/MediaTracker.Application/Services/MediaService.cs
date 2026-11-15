@@ -25,7 +25,11 @@ public class MediaService : IMediaService
 
     public async Task DeleteAsync(Guid id)
     {
-        await _mediaRepository.DeleteAsync(id);
+        var media = await _mediaRepository.FindAsync(id);
+        if (media is null)
+            throw new NotFoundException($"Media with id {id} was not found.");
+
+        _mediaRepository.Remove(media);
         await _mediaRepository.SaveChangesAsync();
     }
 

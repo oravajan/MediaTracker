@@ -7,7 +7,8 @@ public interface IMediaRepository
     Task<IEnumerable<Media>> GetAllAsync();
     Task<List<Guid>> GetAllIdsAsync();
     Task<Media?> GetByIdAsync(Guid id);
-    Task DeleteAsync(Guid id);
+    Task<Media?> FindAsync(Guid id);
+    void Remove(Media media);
 
     Task<Movie?> GetMovieByIdAsync(Guid id);
     Task<Movie?> GetMovieByTmdbIdAsync(int tmdbId);
