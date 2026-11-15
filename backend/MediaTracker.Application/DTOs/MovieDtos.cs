@@ -18,5 +18,3 @@ public record UpdateMovieDto(
     bool IsWatched,
     int? TmdbId,
     int? ReleaseYear);
-
-public record MarkWatchedMovieDto(bool IsWatched);

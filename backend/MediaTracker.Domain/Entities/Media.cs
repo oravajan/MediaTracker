@@ -12,7 +12,7 @@ public abstract class Media
     public int? TmdbId { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public Media(string title, int? userRating, int? tmdbId)
+    protected Media(string title, int? userRating, int? tmdbId)
     {
         ValidateTitle(title);
         ValidateUserRating(userRating);

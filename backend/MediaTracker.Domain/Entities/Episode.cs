@@ -22,7 +22,7 @@ public class Episode
         MarkWatched(isWatched);
     }
 
-    public Episode() { }
+    private Episode() { }
 
     internal void Update(int episodeNumber, string? title, bool isWatched)
     {
