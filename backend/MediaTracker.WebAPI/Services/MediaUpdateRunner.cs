@@ -1,10 +1,12 @@
-﻿using MediaTracker.Application.Interfaces;
+﻿using System.Threading.Channels;
+using MediaTracker.Application.Interfaces;
 
 namespace MediaTracker.WebAPI.Services;
 
-public class MediaUpdateRunner
+public class MediaUpdateRunner : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly Channel<bool> _requests = Channel.CreateUnbounded<bool>();
     private int _running;
 
     public MediaUpdateRunner(IServiceScopeFactory scopeFactory)
@@ -19,11 +21,26 @@ public class MediaUpdateRunner
         if (Interlocked.CompareExchange(ref _running, 1, 0) != 0)
             return false;
 
-        _ = Task.Run(RunAsync);
+        _requests.Writer.TryWrite(true);
         return true;
     }
 
-    private async Task RunAsync()
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await foreach (var _ in _requests.Reader.ReadAllAsync(stoppingToken))
+        {
+            try
+            {
+                await RunAsync(stoppingToken);
+            }
+            finally
+            {
+                Volatile.Write(ref _running, 0);
+            }
+        }
+    }
+
+    private async Task RunAsync(CancellationToken stoppingToken)
     {
         try
         {
@@ -37,6 +54,12 @@ public class MediaUpdateRunner
 
             foreach (var id in ids)
             {
+                if (stoppingToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("Media update cancelled.");
+                    return;
+                }
+
                 try
                 {
                     using var scope = _scopeFactory.CreateScope();
@@ -53,10 +76,6 @@ public class MediaUpdateRunner
         catch (Exception ex)
         {
             Console.WriteLine($"Media update aborted: {ex.Message}");
-        }
-        finally
-        {
-            Volatile.Write(ref _running, 0);
         }
     }
 }

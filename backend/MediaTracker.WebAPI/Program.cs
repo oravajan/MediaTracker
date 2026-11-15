@@ -25,6 +25,7 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<INextMovieLinker, NextMovieLinker>();
 builder.Services.AddScoped<ITvShowService, TvShowService>();
 builder.Services.AddSingleton<MediaUpdateRunner>();
+builder.Services.AddHostedService(serviceProvider => serviceProvider.GetRequiredService<MediaUpdateRunner>());
 
 builder.Services.AddCors(options =>
 {
